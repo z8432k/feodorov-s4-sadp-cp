@@ -24,3 +24,11 @@ void free_raw_data(RawData_t *data);
 void data_add_client(RawData_t *data, Client_t *client);
 
 void reg_client(Client_t *client);
+
+void fill_client(
+  Client_t *client,
+  gchar *name,
+  gchar *license,
+  gchar *passport,
+  gchar *address
+);

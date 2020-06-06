@@ -55,10 +55,12 @@ int main(int argc, char *argv[])
 
   Client_t *newClient = new_client();
 
-  g_string_assign(newClient->name, srcClient.name);
-  g_string_assign(newClient->license, srcClient.license);
-  g_string_assign(newClient->passport, srcClient.passport);
-  g_string_assign(newClient->address, srcClient.address);
+  fill_client(newClient,
+    srcClient.name,
+    srcClient.license,
+    srcClient.passport,
+    srcClient.address
+  );
 
   reg_client(newClient);
 }

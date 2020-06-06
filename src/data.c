@@ -47,6 +47,14 @@ void free_client(gpointer data)
   g_free(*client);
 }
 
+void fill_client(Client_t *client, gchar *name, gchar *license, gchar *passport, gchar *address)
+{
+  g_string_assign(client->name, name);
+  g_string_assign(client->license, license);
+  g_string_assign(client->passport, passport);
+  g_string_assign(client->address, address);
+}
+
 void data_add_client(RawData_t *data, Client_t *client)
 {
   g_array_append_val(data->clients, client);
