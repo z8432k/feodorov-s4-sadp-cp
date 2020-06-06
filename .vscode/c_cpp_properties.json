@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/src/include/*",
+                "/usr/include",
+                "/usr/include/glib-2.0",
+                "/home/alexander/local/include/*",
+                "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc-9",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
