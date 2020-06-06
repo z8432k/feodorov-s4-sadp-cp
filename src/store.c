@@ -3,6 +3,7 @@
 #include <glib/gstdio.h>
 #include <jansson.h>
 
+#include "include/client.h"
 #include "include/store.h"
 
 #define DATA_FILENAME "car_rent_data.json"
@@ -82,7 +83,7 @@ void save_data(RawData_t *data)
 
 RawData_t *load_data()
 {
-  RawData_t *data = new_raw_data();
+  RawData_t *data = new_data();
 
   if (g_file_test(DATA_FILENAME, G_FILE_TEST_EXISTS)) {
     json_load_data(data);

@@ -3,6 +3,7 @@
 #include <locale.h>
 #include <glib.h>
 
+#include "include/client.h"
 #include "include/store.h"
 
 #define GETTEXT_PACKAGE "gtk20"
@@ -37,6 +38,16 @@ static GOptionEntry entries[] =
   { NULL }
 };
 
+static inline void reg_client(Client_t *client)
+{
+  RawData_t *data = load_data();
+
+  data_add_client(data, client);
+
+  save_data(data);
+
+  free_data(data);
+}
 
 int main(int argc, char *argv[])
 {
