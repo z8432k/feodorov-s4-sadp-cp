@@ -21,7 +21,14 @@
 #define CAR_YEAR "year"
 #define CAR_EXISTS "exists"
 
-static inline json_t* json_build_client(Client_t *data)
+#define clients_array_to_json_array(data, builder) \
+  data_array_to_json_array(data, (jsonFromData) builder)
+#define cars_array_to_json_array(data, builder) \
+  data_array_to_json_array(data, (jsonFromData) builder)
+
+typedef json_t* (* jsonFromData)(void *);
+
+static json_t* json_build_client(Client_t *data)
 {
   json_t *field;
   json_t *obj = json_object();
@@ -41,7 +48,7 @@ static inline json_t* json_build_client(Client_t *data)
   return obj;
 }
 
-static inline json_t* json_build_car(Car_t *data)
+static json_t* json_build_car(Car_t *data)
 {
   json_t *field;
   json_t *obj = json_object();
@@ -62,6 +69,22 @@ static inline json_t* json_build_car(Car_t *data)
   json_object_set_new(obj, CAR_EXISTS, field);
 
   return obj;
+}
+
+json_t* data_array_to_json_array(GArray *array, jsonFromData builder)
+{
+  json_t *item;
+  json_t *result = json_array();
+
+  for (guint i = 0; i < array->len; i++) {
+    void *data = g_array_index(array, void *, i);
+
+    item = builder(data);
+
+    json_array_append_new(result, item);
+  }
+
+  return result;
 }
 
 static inline void json_load_data(RawData_t *data)
@@ -110,24 +133,14 @@ void save_data(RawData_t *data)
 {
   FILE *file = g_fopen(DATA_FILENAME, "w+");
 
-  json_t *root, *clients, *client, *cars, *car;
+  json_t *root, *clients, *cars;
 
   root = json_object();
-  clients = json_array();
-  cars = json_array();
 
-  for (guint i = 0; i < data->clients->len; i++) {
-    Client_t *clientData = g_array_index(data->clients, Client_t *, i);
-    client = json_build_client(clientData);
-    json_array_append_new(clients, client);
-  }
+  clients = clients_array_to_json_array(data->clients, json_build_client);
   json_object_set_new(root, CLIENTS_FIELD, clients);
 
-  for (guint i = 0; i < data->cars->len; i++) {
-    Car_t *carData = g_array_index(data->cars, Car_t *, i);
-    car = json_build_car(carData);
-    json_array_append_new(cars, car);
-  }
+  cars = cars_array_to_json_array(data->cars, json_build_car);
   json_object_set_new(root, CARS_FIELD, cars);
 
   json_dumpf(root, file, JSON_INDENT(2));
