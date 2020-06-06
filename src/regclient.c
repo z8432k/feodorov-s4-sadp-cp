@@ -3,7 +3,6 @@
 #include <locale.h>
 #include <glib.h>
 
-#include "include/client.h"
 #include "include/store.h"
 
 #define GETTEXT_PACKAGE "gtk20"

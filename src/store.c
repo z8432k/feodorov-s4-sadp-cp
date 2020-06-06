@@ -3,47 +3,79 @@
 #include <glib/gstdio.h>
 #include <jansson.h>
 
-#include "include/client.h"
 #include "include/store.h"
 
 #define DATA_FILENAME "car_rent_data.json"
 
 #define CLIENTS_FIELD "clients"
+#define CARS_FIELD "cars"
+
 #define CLIENT_NAME "name"
 #define CLIENT_LICENSE "license"
 #define CLIENTS_PASSPORT "passport"
 #define CLIENTS_ADDRESS "address"
 
+#define CAR_NUMBER "number"
+#define CAR_MODEL "model"
+#define CAR_COLOR "color"
+#define CAR_YEAR "year"
+#define CAR_EXISTS "exists"
+
 static inline json_t* json_build_client(Client_t *data)
 {
   json_t *field;
-  json_t *client = json_object();
+  json_t *obj = json_object();
 
   field = json_string(data->name->str);
-  json_object_set_new(client, CLIENT_NAME, field);
+  json_object_set_new(obj, CLIENT_NAME, field);
 
   field = json_string(data->license->str);
-  json_object_set_new(client, CLIENT_LICENSE, field);
+  json_object_set_new(obj, CLIENT_LICENSE, field);
 
   field = json_string(data->passport->str);
-  json_object_set_new(client, CLIENTS_PASSPORT, field);
+  json_object_set_new(obj, CLIENTS_PASSPORT, field);
 
   field = json_string(data->address->str);
-  json_object_set_new(client, CLIENTS_ADDRESS, field);
+  json_object_set_new(obj, CLIENTS_ADDRESS, field);
 
-  return client;
+  return obj;
+}
+
+static inline json_t* json_build_car(Car_t *data)
+{
+  json_t *field;
+  json_t *obj = json_object();
+
+  field = json_string(data->number->str);
+  json_object_set_new(obj, CAR_NUMBER, field);
+
+  field = json_string(data->model->str);
+  json_object_set_new(obj, CAR_MODEL, field);
+
+  field = json_string(data->color->str);
+  json_object_set_new(obj, CAR_COLOR, field);
+
+  field = json_integer(data->year);
+  json_object_set_new(obj, CAR_YEAR, field);
+
+  field = json_integer(data->exists);
+  json_object_set_new(obj, CAR_EXISTS, field);
+
+  return obj;
 }
 
 static inline void json_load_data(RawData_t *data)
 {
-  json_t *root, *clients;
+  json_t *root, *clients, *cars;
   json_error_t error;
 
   root = json_load_file(DATA_FILENAME, 0, &error);
   clients = json_object_get(root, CLIENTS_FIELD);
+  cars = json_object_get(root, CARS_FIELD);
 
   size_t index;
   json_t *value;
+
   Client_t *client;
   json_array_foreach(clients, index, value) {
     client = new_client();
@@ -57,24 +89,46 @@ static inline void json_load_data(RawData_t *data)
 
     g_array_append_val(data->clients, client);
   }
+
+  Car_t *car;
+  json_array_foreach(cars, index, value) {
+    car = new_car();
+
+    fill_car(car,
+      json_string_value(json_object_get(value, CAR_NUMBER)),
+      json_string_value(json_object_get(value, CAR_MODEL)),
+      json_string_value(json_object_get(value, CAR_COLOR)),
+      json_integer_value(json_object_get(value, CAR_YEAR)),
+      json_integer_value(json_object_get(value, CAR_EXISTS))
+    );
+
+    g_array_append_val(data->cars, car);
+  }
 }
 
 void save_data(RawData_t *data)
 {
   FILE *file = g_fopen(DATA_FILENAME, "w+");
 
-  json_t *root, *clients, *client;
+  json_t *root, *clients, *client, *cars, *car;
 
   root = json_object();
   clients = json_array();
+  cars = json_array();
 
   for (guint i = 0; i < data->clients->len; i++) {
     Client_t *clientData = g_array_index(data->clients, Client_t *, i);
     client = json_build_client(clientData);
     json_array_append_new(clients, client);
   }
-
   json_object_set_new(root, CLIENTS_FIELD, clients);
+
+  for (guint i = 0; i < data->cars->len; i++) {
+    Car_t *carData = g_array_index(data->cars, Car_t *, i);
+    car = json_build_car(carData);
+    json_array_append_new(cars, car);
+  }
+  json_object_set_new(root, CARS_FIELD, cars);
 
   json_dumpf(root, file, JSON_INDENT(2));
 

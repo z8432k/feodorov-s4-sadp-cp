@@ -71,3 +71,4 @@ bin/*.o
 car_rent_data.json
 bin/dropclient
 bin/regclient
+bin/addcar

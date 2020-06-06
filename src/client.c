@@ -1,6 +1,5 @@
 #include "include/client.h"
 
-// Client
 Client_t* new_client()
 {
   Client_t *client = g_new(Client_t, 1);
