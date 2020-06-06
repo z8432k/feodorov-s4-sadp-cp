@@ -69,6 +69,8 @@ bin/*.o
 
 bin/*.o
 car_rent_data.json
-bin/dropclient
-bin/regclient
-bin/addcar
+bin/drop*
+bin/reg*
+bin/add*
+bin/list*
+bin/search*

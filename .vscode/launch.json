@@ -8,7 +8,7 @@
       "name": "(gdb) Launch",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/bin/addcar",
+      "program": "${workspaceFolder}/bin/listclients",
       "args": [
         "-n",
         "A000A-78",
