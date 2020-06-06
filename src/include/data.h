@@ -18,3 +18,5 @@ void free_data(RawData_t *data);
 void data_add_client(RawData_t *data, Client_t *client);
 void data_add_car(RawData_t *data, Car_t *car);
 
+void data_truncate_clients(RawData_t *data);
+void data_truncate_cars(RawData_t *data);

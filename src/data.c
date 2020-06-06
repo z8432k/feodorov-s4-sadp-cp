@@ -33,3 +33,21 @@ void data_add_car(RawData_t *data, Car_t *car)
 {
   g_array_append_val(data->cars, car);
 }
+
+void data_truncate_clients(RawData_t *data)
+{
+  GArray *empty = g_array_new(TRUE, TRUE, sizeof(Client_t *));
+
+  g_array_free(data->clients, TRUE);
+
+  data->clients = empty;
+}
+
+void data_truncate_cars(RawData_t *data)
+{
+  GArray *empty = g_array_new(TRUE, TRUE, sizeof(Car_t *));
+
+  g_array_free(data->cars, TRUE);
+
+  data->cars = empty;
+}
