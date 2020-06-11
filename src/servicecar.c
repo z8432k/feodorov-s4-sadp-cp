@@ -12,7 +12,7 @@ typedef struct {
     gboolean exists;
 } InputData_t;
 
-static const InputData_t inputData;
+static InputData_t inputData;
 
 static GOptionEntry entries[] =
 {

@@ -111,3 +111,11 @@ target_link_libraries(rentcar
         common
         ${GLIB2_LDFLAGS}
         ${JANSSON_LDFLAGS})
+
+add_executable(searchcar src/searchcar.c)
+target_include_directories(searchcar
+        PRIVATE ${GLIB2_INCLUDE_DIRS})
+target_link_libraries(searchcar
+        common
+        ${GLIB2_LDFLAGS}
+        ${JANSSON_LDFLAGS})
