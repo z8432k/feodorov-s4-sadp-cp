@@ -6,6 +6,9 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_EXTENSIONS ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+set(CMAKE_C_FLAGS_DEBUG "-Wall -Wextra -Wpedantic -O0 -ggdb")
+set(CMAKE_C_FLAGS_RELEASE "-march=native -O3")
+
 set(ENV{PKG_CONFIG_PATH} ~/local/lib/pkgconfig)
 
 find_package(PkgConfig REQUIRED)
@@ -89,6 +92,14 @@ add_executable(dropcar src/dropcar.c)
 target_include_directories(dropcar
         PRIVATE ${GLIB2_INCLUDE_DIRS})
 target_link_libraries(dropcar
+        common
+        ${GLIB2_LDFLAGS}
+        ${JANSSON_LDFLAGS})
+
+add_executable(servicecar src/servicecar.c)
+target_include_directories(servicecar
+        PRIVATE ${GLIB2_INCLUDE_DIRS})
+target_link_libraries(servicecar
         common
         ${GLIB2_LDFLAGS}
         ${JANSSON_LDFLAGS})

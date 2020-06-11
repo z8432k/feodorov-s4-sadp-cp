@@ -8,13 +8,22 @@
 #define GETTEXT_PACKAGE "gtk20"
 #include <glib/gi18n-lib.h>
 
-static gboolean all;
+typedef struct {
+    gchar *number;
+    gboolean exists;
+} InputData_t;
+
+static const InputData_t inputData;
 
 static GOptionEntry entries[] =
 {
-  { "all", 'a', 0, G_OPTION_ARG_NONE, &all,
-                "Удалить все автомобили",
-                NULL },
+  { "number", 'n', 0, G_OPTION_ARG_NONE, &inputData.number,
+                "Государственный номер",
+                "ANNNAA-NN" },
+
+  { "service", 's', 0, G_OPTION_ARG_INT, &inputData.exists,
+          "Признак ремонта",
+          "1" },
 
   { NULL }
 };
@@ -26,7 +35,7 @@ int main(int argc, char *argv[])
   GError *error = NULL;
   GOptionContext *context;
 
-  context = g_option_context_new(" - Удаление автомобилей");
+  context = g_option_context_new(" - Отправка (возвращение) автомобиля на ремонт");
   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
 
   if (!g_option_context_parse (context, &argc, &argv, &error)) {
@@ -34,15 +43,6 @@ int main(int argc, char *argv[])
     exit (1);
   }
 
-  if (all) {
-    RawData_t *data = load_data();
-
-    data_truncate_cars(data);
-
-    save_data(data);
-  }
-  else {
-    printf("Not impolemented.\n");
-  }
+  printf("Not implemented.\n");
 }
 
