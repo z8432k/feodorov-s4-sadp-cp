@@ -6,7 +6,6 @@
 #include "include/store.h"
 
 #define GETTEXT_PACKAGE "gtk20"
-#include <glib/gi18n-lib.h>
 
 typedef struct {
     gchar *number;
