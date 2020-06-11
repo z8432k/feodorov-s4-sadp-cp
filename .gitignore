@@ -3,7 +3,6 @@ CMakeCache.txt
 CMakeFiles
 CMakeScripts
 Testing
-Makefile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
@@ -63,9 +62,14 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+cmake-build-debug
+cmake-build-release
+build
+
 bin/blist
 bin/*.o
 
+.idea
 
 bin/*.o
 car_rent_data.json
