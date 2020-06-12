@@ -27,8 +27,8 @@ target_include_directories(data PRIVATE ${GLIB2_INCLUDE_DIRS})
 
 add_library(store
         OBJECT
-        src/include/store.h
-        src/store.c)
+        src/include/jsonstore.h
+        src/jsonstore.c)
 target_include_directories(store PRIVATE ${GLIB2_INCLUDE_DIRS})
 target_include_directories(store PRIVATE ${JANSSON_INCLUDE_DIRS})
 
@@ -44,12 +44,19 @@ add_library(car
         src/car.c)
 target_include_directories(car PRIVATE ${GLIB2_INCLUDE_DIRS})
 
+add_library(rentrow
+        OBJECT
+        src/include/rentrow.h
+        src/rentrow.c)
+target_include_directories(rentrow PRIVATE ${GLIB2_INCLUDE_DIRS})
+
 add_library(common
         STATIC
         $<TARGET_OBJECTS:data>
         $<TARGET_OBJECTS:store>
         $<TARGET_OBJECTS:client>
-        $<TARGET_OBJECTS:car>)
+        $<TARGET_OBJECTS:car>
+        $<TARGET_OBJECTS:rentrow>)
 
 list(APPEND _targets
         regclient

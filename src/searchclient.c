@@ -3,7 +3,7 @@
 #include <locale.h>
 #include <glib.h>
 
-#include "include/store.h"
+#include "include/jsonstore.h"
 
 #define GETTEXT_PACKAGE "gtk20"
 

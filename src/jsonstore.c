@@ -3,7 +3,7 @@
 #include <glib/gstdio.h>
 #include <jansson.h>
 
-#include "include/store.h"
+#include "include/jsonstore.h"
 
 #define DATA_FILENAME "car_rent_data.json"
 
