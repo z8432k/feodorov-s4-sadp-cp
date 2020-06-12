@@ -37,6 +37,8 @@ int main(int argc, char *argv[])
     context = g_option_context_new(" - Поиск автомобиля в базе");
     g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
 
+    g_option_context_set_description(context, "Поиск по гос. номеру имеет более высокий приоритет при указании обоих параметров одновременно.");
+
     if (!g_option_context_parse (context, &argc, &argv, &error)) {
         g_print ("option parsing failed: %s\n", error->message);
         exit (1);

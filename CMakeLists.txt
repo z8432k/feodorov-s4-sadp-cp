@@ -6,15 +6,18 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_EXTENSIONS ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-set(CMAKE_C_FLAGS_DEBUG "-Wall -Wextra -Wpedantic -O0 -ggdb")
-set(CMAKE_C_FLAGS_RELEASE "-march=native -O3")
+if(CMAKE_COMPILER_IS_GNUCC)
+  message(STATUS "Detected GNU compiler. Using specific flags.")
+  set(CMAKE_C_FLAGS_DEBUG "-Wall -Wextra -Wpedantic -O0 -ggdb")
+  set(CMAKE_C_FLAGS_RELEASE "-march=native -O3")
+endif()
 
-set(ENV{PKG_CONFIG_PATH} ~/local/lib/pkgconfig)
 
 find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(GLIB2 REQUIRED glib-2.0)
 pkg_check_modules(JANSSON REQUIRED jansson)
+pkg_check_modules(SQLITE REQUIRED sqlite3)
 
 add_library(data
         OBJECT
@@ -48,74 +51,27 @@ add_library(common
         $<TARGET_OBJECTS:client>
         $<TARGET_OBJECTS:car>)
 
-add_executable(regclient src/regclient.c)
-target_include_directories(regclient
-        PRIVATE ${GLIB2_INCLUDE_DIRS})
-target_link_libraries(regclient
-        common
-        ${GLIB2_LDFLAGS}
-        ${JANSSON_LDFLAGS})
+list(APPEND _targets
+        regclient
+        addcar
+        listcars
+        listclients
+        dropclient
+        dropcar
+        servicecar
+        rentcar
+        searchcar
+        searchclient)
 
-add_executable(addcar src/addcar.c)
-target_include_directories(addcar
-        PRIVATE ${GLIB2_INCLUDE_DIRS})
-target_link_libraries(addcar
-        common
-        ${GLIB2_LDFLAGS}
-        ${JANSSON_LDFLAGS})
+foreach(_target IN LISTS _targets)
+  add_executable(${_target} src/${_target}.c)
 
-add_executable(listcars src/listcars.c)
-target_include_directories(listcars
-        PRIVATE ${GLIB2_INCLUDE_DIRS})
-target_link_libraries(listcars
-        common
-        ${GLIB2_LDFLAGS}
-        ${JANSSON_LDFLAGS})
+  target_include_directories(${_target}
+          PRIVATE ${GLIB2_INCLUDE_DIRS})
 
-add_executable(listclients src/listclients.c)
-target_include_directories(listclients
-        PRIVATE ${GLIB2_INCLUDE_DIRS})
-target_link_libraries(listclients
-        common
-        ${GLIB2_LDFLAGS}
-        ${JANSSON_LDFLAGS})
+  target_link_libraries(${_target}
+          common
+          ${GLIB2_LDFLAGS}
+          ${JANSSON_LDFLAGS})
+endforeach()
 
-add_executable(dropclient src/dropclient.c)
-target_include_directories(dropclient
-        PRIVATE ${GLIB2_INCLUDE_DIRS})
-target_link_libraries(dropclient
-        common
-        ${GLIB2_LDFLAGS}
-        ${JANSSON_LDFLAGS})
-
-add_executable(dropcar src/dropcar.c)
-target_include_directories(dropcar
-        PRIVATE ${GLIB2_INCLUDE_DIRS})
-target_link_libraries(dropcar
-        common
-        ${GLIB2_LDFLAGS}
-        ${JANSSON_LDFLAGS})
-
-add_executable(servicecar src/servicecar.c)
-target_include_directories(servicecar
-        PRIVATE ${GLIB2_INCLUDE_DIRS})
-target_link_libraries(servicecar
-        common
-        ${GLIB2_LDFLAGS}
-        ${JANSSON_LDFLAGS})
-
-add_executable(rentcar src/rentcar.c)
-target_include_directories(rentcar
-        PRIVATE ${GLIB2_INCLUDE_DIRS})
-target_link_libraries(rentcar
-        common
-        ${GLIB2_LDFLAGS}
-        ${JANSSON_LDFLAGS})
-
-add_executable(searchcar src/searchcar.c)
-target_include_directories(searchcar
-        PRIVATE ${GLIB2_INCLUDE_DIRS})
-target_link_libraries(searchcar
-        common
-        ${GLIB2_LDFLAGS}
-        ${JANSSON_LDFLAGS})
