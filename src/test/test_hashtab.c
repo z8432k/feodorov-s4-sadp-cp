@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <glib.h>
 
 #include "../include/hashtab.h"
@@ -27,6 +26,8 @@ int main(void)
     g_assert(*val == arr[i]);
     g_free(key);
   }
+
+  hash_tab_free(tab);
 
   return 0;
 }
