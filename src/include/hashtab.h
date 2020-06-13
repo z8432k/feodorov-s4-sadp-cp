@@ -5,8 +5,14 @@
 #include <glib.h>
 
 typedef struct {
+    GString *key;
+    gconstpointer data;
+    guchar deleted : 1;
+} HashTabCell_t;
+
+typedef struct {
   gsize size;
-  GArray *data;
+  HashTabCell_t *data;
 } HashTab_t;
 
 HashTab_t* hash_tab_new();
