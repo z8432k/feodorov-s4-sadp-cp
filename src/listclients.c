@@ -2,7 +2,7 @@
 #include <locale.h>
 
 #include "include/stringify_json.h"
-#include "include/jsonstore.h"
+#include "include/json_store.h"
 
 #define GETTEXT_PACKAGE "gtk20"
 

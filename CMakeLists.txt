@@ -27,14 +27,23 @@ target_include_directories(data
         PRIVATE
         ${GLIB2_INCLUDE_DIRS})
 
-add_library(jsonstore
+add_library(json_store
         OBJECT
-        src/include/jsonstore.h
-        src/jsonstore.c)
-target_include_directories(jsonstore
+        src/include/json_store.h
+        src/json_store.c)
+target_include_directories(json_store
         PRIVATE
         ${GLIB2_INCLUDE_DIRS}
         ${JANSSON_INCLUDE_DIRS})
+
+add_library(sqlite_store
+        OBJECT
+        src/include/sqlite_store.h
+        src/sqlite_store.c)
+target_include_directories(sqlite_store
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS}
+        ${SQLITE_INCLUDE_DIRS})
 
 add_library(client
         OBJECT
@@ -73,7 +82,7 @@ target_include_directories(stringify_json
 add_library(common
         STATIC
         $<TARGET_OBJECTS:data>
-        $<TARGET_OBJECTS:jsonstore>
+        $<TARGET_OBJECTS:json_store>
         $<TARGET_OBJECTS:client>
         $<TARGET_OBJECTS:car>
         $<TARGET_OBJECTS:rentrow>
