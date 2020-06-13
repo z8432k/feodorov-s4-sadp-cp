@@ -79,6 +79,14 @@ target_include_directories(stringify_json
         ${GLIB2_INCLUDE_DIRS}
         ${JANSSON_INCLUDE_DIRS})
 
+add_library(hashtab
+        OBJECT
+        src/include/hashtab.h
+        src/hashtab.c)
+target_include_directories(hashtab
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS})
+
 add_library(common
         STATIC
         $<TARGET_OBJECTS:data>
@@ -86,7 +94,8 @@ add_library(common
         $<TARGET_OBJECTS:client>
         $<TARGET_OBJECTS:car>
         $<TARGET_OBJECTS:rentrow>
-        $<TARGET_OBJECTS:stringify_json>)
+        $<TARGET_OBJECTS:stringify_json>
+        $<TARGET_OBJECTS:hashtab>)
 
 list(APPEND _targets
         regclient
@@ -114,3 +123,26 @@ foreach(_target IN LISTS _targets)
           ${JANSSON_LDFLAGS})
 endforeach()
 
+list(APPEND _tests
+        test_hashtab)
+
+foreach(_test IN LISTS _tests)
+  add_executable(${_test} src/test/${_test}.c)
+
+  target_include_directories(${_test}
+          PRIVATE
+          ${GLIB2_INCLUDE_DIRS}
+          ${JANSSON_INCLUDE_DIRS})
+
+  target_link_libraries(${_test}
+          common
+          ${GLIB2_LDFLAGS}
+          ${JANSSON_LDFLAGS})
+endforeach()
+
+enable_testing()
+
+add_test(
+        NAME hashtab_test
+        COMMAND $<TARGET_FILE:test_hashtab>
+)
