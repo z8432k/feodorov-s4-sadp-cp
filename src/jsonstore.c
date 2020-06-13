@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <glib.h>
 #include <glib/gstdio.h>
 #include <jansson.h>
 
@@ -10,25 +9,7 @@
 #define CLIENTS_FIELD "clients"
 #define CARS_FIELD "cars"
 
-#define CLIENT_NAME "name"
-#define CLIENT_LICENSE "license"
-#define CLIENTS_PASSPORT "passport"
-#define CLIENTS_ADDRESS "address"
-
-#define CAR_NUMBER "number"
-#define CAR_MODEL "model"
-#define CAR_COLOR "color"
-#define CAR_YEAR "year"
-#define CAR_EXISTS "exists"
-
-#define clients_array_to_json_array(data, builder) \
-  data_array_to_json_array(data, (jsonFromData) builder)
-#define cars_array_to_json_array(data, builder) \
-  data_array_to_json_array(data, (jsonFromData) builder)
-
-typedef json_t* (* jsonFromData)(void *);
-
-static json_t* json_build_client(Client_t *data)
+json_t* json_build_client(Client_t *data)
 {
   json_t *field;
   json_t *obj = json_object();
@@ -48,7 +29,7 @@ static json_t* json_build_client(Client_t *data)
   return obj;
 }
 
-static json_t* json_build_car(Car_t *data)
+json_t* json_build_car(Car_t *data)
 {
   json_t *field;
   json_t *obj = json_object();
@@ -127,32 +108,6 @@ static inline void json_load_data(RawData_t *data)
 
     g_array_append_val(data->cars, car);
   }
-}
-
-gchar* clients_stringify(RawData_t *data)
-{
-  gchar *str;
-  json_t *clients;
-
-  clients = clients_array_to_json_array(data->clients, json_build_client);
-  str = json_dumps(clients, JSON_INDENT(2));
-
-  json_decref(clients);
-
-  return str;
-}
-
-gchar* cars_stringify(RawData_t *data)
-{
-  gchar *str;
-  json_t *cars;
-
-  cars = cars_array_to_json_array(data->cars, json_build_car);
-  str = json_dumps(cars, JSON_INDENT(2));
-
-  json_decref(cars);
-
-  return str;
 }
 
 void save_data(RawData_t *data)

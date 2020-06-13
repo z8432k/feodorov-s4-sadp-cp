@@ -23,40 +23,61 @@ add_library(data
         OBJECT
         src/include/data.h
         src/data.c)
-target_include_directories(data PRIVATE ${GLIB2_INCLUDE_DIRS})
+target_include_directories(data
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS})
 
-add_library(store
+add_library(jsonstore
         OBJECT
         src/include/jsonstore.h
         src/jsonstore.c)
-target_include_directories(store PRIVATE ${GLIB2_INCLUDE_DIRS})
-target_include_directories(store PRIVATE ${JANSSON_INCLUDE_DIRS})
+target_include_directories(jsonstore
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS}
+        ${JANSSON_INCLUDE_DIRS})
 
 add_library(client
         OBJECT
         src/include/client.h
         src/client.c)
-target_include_directories(client PRIVATE ${GLIB2_INCLUDE_DIRS})
+target_include_directories(client
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS}
+        ${JANSSON_INCLUDE_DIRS})
 
 add_library(car
         OBJECT
         src/include/car.h
         src/car.c)
-target_include_directories(car PRIVATE ${GLIB2_INCLUDE_DIRS})
+target_include_directories(car
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS})
 
 add_library(rentrow
         OBJECT
         src/include/rentrow.h
         src/rentrow.c)
-target_include_directories(rentrow PRIVATE ${GLIB2_INCLUDE_DIRS})
+target_include_directories(rentrow
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS})
+
+add_library(stringify_json
+        OBJECT
+        src/include/stringify_json.h
+        src/stringify_json.c)
+target_include_directories(stringify_json
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS}
+        ${JANSSON_INCLUDE_DIRS})
 
 add_library(common
         STATIC
         $<TARGET_OBJECTS:data>
-        $<TARGET_OBJECTS:store>
+        $<TARGET_OBJECTS:jsonstore>
         $<TARGET_OBJECTS:client>
         $<TARGET_OBJECTS:car>
-        $<TARGET_OBJECTS:rentrow>)
+        $<TARGET_OBJECTS:rentrow>
+        $<TARGET_OBJECTS:stringify_json>)
 
 list(APPEND _targets
         regclient
@@ -74,7 +95,9 @@ foreach(_target IN LISTS _targets)
   add_executable(${_target} src/${_target}.c)
 
   target_include_directories(${_target}
-          PRIVATE ${GLIB2_INCLUDE_DIRS})
+          PRIVATE
+          ${GLIB2_INCLUDE_DIRS}
+          ${JANSSON_INCLUDE_DIRS})
 
   target_link_libraries(${_target}
           common

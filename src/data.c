@@ -1,6 +1,4 @@
-#include <glib.h>
-
-#include "include/jsonstore.h"
+#include "include/data.h"
 
 // Raw data
 RawData_t* new_data()
