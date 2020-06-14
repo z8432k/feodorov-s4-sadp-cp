@@ -5,4 +5,6 @@
 
 #include <glib.h>
 
-void merge_sort(int values[], int buff[], gsize start, gsize end, int (*comparator)(int *, int *));
+typedef gint (* merge_sort_comparator)(gconstpointer, gconstpointer);
+
+void merge_sort(gpointer values, gpointer buff, gsize size, gsize start, gsize end, merge_sort_comparator comparator);
