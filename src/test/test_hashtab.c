@@ -24,7 +24,6 @@ int main(void)
     key = g_string_new(keys[i]);
     int *val = (int *) hash_tab_get(tab, key);
     g_assert(*val == arr[i]);
-    g_free(key);
   }
 
   hash_tab_free(tab);

@@ -8,8 +8,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 if(CMAKE_COMPILER_IS_GNUCC)
   message(STATUS "Detected GNU compiler. Using specific flags.")
-  set(CMAKE_C_FLAGS_DEBUG "-Wall -Wextra -Wpedantic -O0 -ggdb")
-  set(CMAKE_C_FLAGS_RELEASE "-march=native -O3")
+  set(CMAKE_C_FLAGS_DEBUG "-pipe -Wall -Wextra -Wpedantic -O0 -ggdb")
+  set(CMAKE_C_FLAGS_RELEASE "-pipe -march=native -O3")
 endif()
 
 
@@ -87,6 +87,14 @@ target_include_directories(hashtab
         PRIVATE
         ${GLIB2_INCLUDE_DIRS})
 
+add_library(merge_sort
+        OBJECT
+        src/include/merge_sort.h
+        src/merge_sort.c)
+target_include_directories(merge_sort
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS})
+
 add_library(common
         STATIC
         $<TARGET_OBJECTS:data>
@@ -95,7 +103,8 @@ add_library(common
         $<TARGET_OBJECTS:car>
         $<TARGET_OBJECTS:rentrow>
         $<TARGET_OBJECTS:stringify_json>
-        $<TARGET_OBJECTS:hashtab>)
+        $<TARGET_OBJECTS:hashtab>
+        $<TARGET_OBJECTS:merge_sort>)
 
 list(APPEND _targets
         regclient
@@ -124,7 +133,8 @@ foreach(_target IN LISTS _targets)
 endforeach()
 
 list(APPEND _tests
-        test_hashtab)
+        test_hashtab
+        test_merge_sort)
 
 foreach(_test IN LISTS _tests)
   add_executable(${_test} src/test/${_test}.c)
@@ -145,4 +155,9 @@ enable_testing()
 add_test(
         NAME hashtab_test
         COMMAND $<TARGET_FILE:test_hashtab>
+)
+
+add_test(
+        NAME merge_sort_test
+        COMMAND $<TARGET_FILE:test_merge_sort>
 )
