@@ -2,7 +2,7 @@
 #include <glib/gstdio.h>
 #include <jansson.h>
 
-#include "include/json_store.h"
+#include "../include/storage/json_store.h"
 
 #define DATA_FILENAME "car_rent_data.json"
 

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "include/sqlite_store.h"
+#include "../include/storage/sqlite_store.h"
 
 #define SQLITE_DATA_FILENAME "car_rent_data.sqlite3"
 

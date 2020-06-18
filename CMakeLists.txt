@@ -29,8 +29,8 @@ target_include_directories(data
 
 add_library(json_store
         OBJECT
-        src/include/json_store.h
-        src/json_store.c)
+        src/include/storage/json_store.h
+        src/storage/json_store.c)
 target_include_directories(json_store
         PRIVATE
         ${GLIB2_INCLUDE_DIRS}
@@ -38,8 +38,8 @@ target_include_directories(json_store
 
 add_library(sqlite_store
         OBJECT
-        src/include/sqlite_store.h
-        src/sqlite_store.c)
+        src/include/storage/sqlite_store.h
+        src/storage/sqlite_store.c)
 target_include_directories(sqlite_store
         PRIVATE
         ${GLIB2_INCLUDE_DIRS}
