@@ -18,6 +18,7 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(GLIB2 REQUIRED glib-2.0)
 pkg_check_modules(JANSSON REQUIRED jansson)
 pkg_check_modules(SQLITE REQUIRED sqlite3)
+pkg_check_modules(PGSQL REQUIRED libpq)
 
 add_library(data
         OBJECT
@@ -44,6 +45,23 @@ target_include_directories(sqlite_store
         PRIVATE
         ${GLIB2_INCLUDE_DIRS}
         ${SQLITE_INCLUDE_DIRS})
+
+add_library(pgsql_store
+        OBJECT
+        src/include/storage/pgsql_store.h
+        src/storage/psql_store.c)
+target_include_directories(pgsql_store
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS}
+        ${PGSQL_INCLUDE_DIRS})
+
+add_library(btree
+        OBJECT
+        src/include/btree.h
+        src/btree.c)
+target_include_directories(btree
+        PRIVATE
+        ${GLIB2_INCLUDE_DIRS})
 
 add_library(client
         OBJECT
@@ -99,12 +117,16 @@ add_library(common
         STATIC
         $<TARGET_OBJECTS:data>
         $<TARGET_OBJECTS:json_store>
+        $<TARGET_OBJECTS:pgsql_store>
         $<TARGET_OBJECTS:client>
         $<TARGET_OBJECTS:car>
         $<TARGET_OBJECTS:rentrow>
         $<TARGET_OBJECTS:stringify_json>
         $<TARGET_OBJECTS:hashtab>
+        $<TARGET_OBJECTS:btree>
         $<TARGET_OBJECTS:merge_sort>)
+target_link_libraries(common
+        ${PGSQL_LDFLAGS})
 
 list(APPEND _targets
         regclient
@@ -134,7 +156,8 @@ endforeach()
 
 list(APPEND _tests
         test_hashtab
-        test_merge_sort)
+        test_merge_sort
+        test_btree)
 
 foreach(_test IN LISTS _tests)
   add_executable(${_test} src/test/${_test}.c)

@@ -4,6 +4,7 @@
 #include <glib.h>
 
 #include "include/storage/json_store.h"
+#include "include/storage/pgsql_store.h"
 
 #define GETTEXT_PACKAGE "gtk20"
 #include <glib/gi18n-lib.h>
@@ -49,6 +50,7 @@ static inline void add_car(Car_t *car)
   data_add_car(data, car);
 
   save_data(data);
+  save_data_pgsql(data);
 
   free_data(data);
 }
