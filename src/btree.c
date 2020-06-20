@@ -148,7 +148,9 @@ void btree_foreach(BTree *tree, GTraverseFunc func, gpointer user_data)
 
 void btree_destroy(BTree *tree)
 {
-  btree_internal_traverse_in_order(tree->root, btree_free_node, NULL);
+  if (tree->root) {
+    btree_internal_traverse_in_order(tree->root, btree_free_node, NULL);
+  }
 
   g_free(tree);
   g_print("BTree destroyed.\n");

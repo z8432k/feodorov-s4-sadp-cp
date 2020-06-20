@@ -110,7 +110,16 @@ add_library(common
         $<TARGET_OBJECTS:btree>
         $<TARGET_OBJECTS:merge_sort>)
 target_link_libraries(common
-        ${PGSQL_LDFLAGS})
+        INTERFACE
+        ${GLIB2_LDFLAGS}
+        ${PGSQL_LDFLAGS}
+        ${JANSSON_LDFLAGS})
+
+target_include_directories(common
+        INTERFACE
+        ${CMAKE_CURRENT_LIST_DIR}/include
+        ${GLIB2_INCLUDE_DIRS}
+        ${JANSSON_INCLUDE_DIRS})
 
 list(APPEND _targets
         regclient
@@ -127,13 +136,6 @@ list(APPEND _targets
 foreach(_target IN LISTS _targets)
   add_executable(${_target} ${_target}.c)
 
-  target_include_directories(${_target}
-          PRIVATE
-          ${GLIB2_INCLUDE_DIRS}
-          ${JANSSON_INCLUDE_DIRS})
-
   target_link_libraries(${_target}
-          common
-          ${GLIB2_LDFLAGS}
-          ${JANSSON_LDFLAGS})
+          common)
 endforeach()
