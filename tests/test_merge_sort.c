@@ -1,6 +1,6 @@
 #include <glib.h>
 
-#include "../include/merge_sort.h"
+#include "../src/include/merge_sort.h"
 
 #define SIZE 17
 

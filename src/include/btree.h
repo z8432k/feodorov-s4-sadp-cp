@@ -28,7 +28,8 @@ struct __BTreeNode {
 BTree* btree_new_full(GCompareDataFunc comparator, GDestroyNotify key_destroy_func, GDestroyNotify value_destroy_func);
 void btree_destroy(BTree *btree);
 void btree_insert(BTree *tree, gpointer key, gpointer value);
-gboolean btree_remove(BTree *tree, gpointer key);
+gboolean btree_remove(BTree *tree, gconstpointer key);
+gpointer btree_lookup(BTree *tree, gconstpointer key);
 void btree_foreach(BTree *tree, GTraverseFunc func, gpointer user_data);
 
 

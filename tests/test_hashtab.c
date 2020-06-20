@@ -1,6 +1,6 @@
 #include <glib.h>
 
-#include "../include/hashtab.h"
+#include "../src/include/hashtab.h"
 
 static int arr[] = {1,2,3,4};
 static gchar *keys[] = {
