@@ -2,7 +2,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE  ON)
 
 list(APPEND _tests
   test_hashtab
-  test_merge_sort)
+  test_merge_sort
+  test_btree)
 
 foreach(_test IN LISTS _tests)
   add_executable(${_test} ${_test}.c)
@@ -18,8 +19,8 @@ foreach(_test IN LISTS _tests)
     ${JANSSON_LDFLAGS})
 endforeach()
 
-add_executable(test_btree btree/btree_main_test.c)
-target_link_libraries(test_btree
+add_executable(test_btree_new btree/btree_main_test.c)
+target_link_libraries(test_btree_new
   common)
 
 enable_testing()
@@ -33,9 +34,9 @@ add_test(
   COMMAND $<TARGET_FILE:test_merge_sort>)
 
 add_test(
-  NAME btree_test
+  NAME test_btree
   COMMAND $<TARGET_FILE:test_btree>)
 
 add_test(
-  NAME test_btree
-  COMMAND $<TARGET_FILE:test_btree>)
+  NAME test_btree_new
+  COMMAND $<TARGET_FILE:test_btree_new>)

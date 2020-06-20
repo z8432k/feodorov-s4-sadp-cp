@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include "../src/include/btree.h"
 
+static gint src[] = {1, 5, 16, 2, 99, 68, 36, 86, 79, 52, 14, 9, 7, 0};
 
-
+static gint comparator(gconstpointer a, gconstpointer b, gpointer user_data)
+{
+  return a - b;
+}
 
 static gboolean print_node(gint key, gint value, gpointer user_data)
 {
@@ -32,6 +36,10 @@ int main(void)
   btree_foreach(tree, print_node, NULL);
 
   target = btree_lookup(tree, 52);
+
+  btree_insert(tree, 99, 100);
+
+  btree_foreach(tree, print_node, NULL);
 
   btree_destroy(tree);
 }
