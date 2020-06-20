@@ -33,13 +33,17 @@ int main(void)
 
   ok = btree_remove(tree, 52);
 
-  btree_foreach(tree, print_node, NULL);
+  btree_foreach_pre(tree, print_node, NULL);
 
   target = btree_lookup(tree, 52);
 
   btree_insert(tree, 99, 100);
 
   btree_foreach(tree, print_node, NULL);
+
+  g_print("\n");
+
+  btree_foreach_pre(tree, print_node, NULL);
 
   btree_destroy(tree);
 }

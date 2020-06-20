@@ -31,6 +31,7 @@ void btree_insert(BTree *tree, gpointer key, gpointer value);
 gboolean btree_remove(BTree *tree, gconstpointer key);
 gpointer btree_lookup(BTree *tree, gconstpointer key);
 void btree_foreach(BTree *tree, GTraverseFunc func, gpointer user_data);
+void btree_foreach_pre(BTree *tree, GTraverseFunc func, gpointer user_data);
 
 
 #endif //_BTREE_H_

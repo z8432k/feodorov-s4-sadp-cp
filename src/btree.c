@@ -83,6 +83,21 @@ static void btree_traverse_in_order(BTreeNode *current_node, GTraverseFunc func,
   }
 }
 
+static void btree_traverse_pre_order(BTreeNode *current_node, GTraverseFunc func, gpointer user_data)
+{
+  if (current_node->left != NULL) {
+    btree_traverse_pre_order(current_node->left, func, user_data);
+  }
+
+  if (current_node->right != NULL) {
+    btree_traverse_pre_order(current_node->right, func, user_data);
+  }
+
+  if (func(current_node->key, current_node->value, user_data)) {
+    return;
+  }
+}
+
 static void btree_internal_traverse_in_order(BTreeNode *current_node, BTreeInternalTraverseFunc func, gpointer user_data)
 {
   if (current_node->left != NULL) {
@@ -144,6 +159,11 @@ void btree_insert(BTree *tree, gpointer key, gpointer value)
 void btree_foreach(BTree *tree, GTraverseFunc func, gpointer user_data)
 {
   btree_traverse_in_order(tree->root, func, user_data);
+}
+
+void btree_foreach_pre(BTree *tree, GTraverseFunc func, gpointer user_data)
+{
+  btree_traverse_pre_order(tree->root, func, user_data);
 }
 
 void btree_destroy(BTree *tree)
