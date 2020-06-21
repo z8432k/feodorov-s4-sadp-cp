@@ -8,7 +8,6 @@ target_include_directories(btree
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
         ${GLIB2_INCLUDE_DIRS})
-target_compile_options(btree PRIVATE "-Wno-unused-parameter")
 
 
 add_library(hashtab
@@ -27,7 +26,6 @@ target_include_directories(layerlist
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
         ${GLIB2_INCLUDE_DIRS})
-target_compile_options(layerlist PRIVATE "-Wno-unused-parameter")
 
 
 add_library(merge_sort

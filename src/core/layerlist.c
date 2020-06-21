@@ -1,7 +1,7 @@
 #include <glib.h>
 #include "layerlist.h"
 
-LList* blist_new(GDestroyNotify item_destroy_func) {
+LList* llist_new(GDestroyNotify item_destroy_func) {
   LList *list = g_new0(LList, 1);
 
   list->first = NULL;
@@ -10,7 +10,7 @@ LList* blist_new(GDestroyNotify item_destroy_func) {
   return list;
 }
 
-LListItem* blist_item_new(gpointer data) {
+LListItem* llist_item_new(gpointer data) {
   LListItem *item = g_new0(LListItem, 1);
 
   item->next = (gpointer ) NULL;
@@ -19,8 +19,8 @@ LListItem* blist_item_new(gpointer data) {
   return item;
 }
 
-LListItem* blist_add_tail(LList *list, gpointer data) {
-  LListItem *item = blist_item_new(data);
+LListItem* llist_add_tail(LList *list, gpointer data) {
+  LListItem *item = llist_item_new(data);
 
   item->list = list;
 
@@ -32,8 +32,8 @@ LListItem* blist_add_tail(LList *list, gpointer data) {
   return item;
 }
 
-LListItem* blist_add_head(LList *list, gpointer data) {
-  LListItem *item = blist_item_new(data);
+LListItem* llist_add_head(LList *list, gpointer data) {
+  LListItem *item = llist_item_new(data);
 
   item->list = list;
 
@@ -46,8 +46,8 @@ LListItem* blist_add_head(LList *list, gpointer data) {
   return item;
 }
 
-LListItem* blist_add_after(LListItem *item, gpointer data) {
-  LListItem *newItem = blist_item_new(data);
+LListItem* llist_add_after(LListItem *item, gpointer data) {
+  LListItem *newItem = llist_item_new(data);
 
   newItem->list = item->list;
 
@@ -61,7 +61,7 @@ LListItem* blist_add_after(LListItem *item, gpointer data) {
   return newItem;
 }
 
-LListItem* blist_remove(LListItem *item) {
+LListItem* llist_remove(LListItem *item) {
   if (item->list->first == item) {
       if (item->next) {
           item->list->first = item->next;
@@ -74,7 +74,7 @@ LListItem* blist_remove(LListItem *item) {
   return item;
 }
 
-void blist_each(LList *list, EachCb cb, gpointer data) {
+void llist_each(LList *list, GFunc cb, gpointer data) {
   LListItem *current = list->first;
 
   while (current) {
@@ -86,8 +86,8 @@ void blist_each(LList *list, EachCb cb, gpointer data) {
     }
 }
 
-void blist_free(LList *list) {
-  blist_each(list, (EachCb) blist_free_item, NULL);
+void llist_destroy(LList *list) {
+  llist_each(list, llist_free_item, NULL);
   g_print("\t==> Free memory for list at %p\n", (gpointer) list);
   g_free(list);
 }

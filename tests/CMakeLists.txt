@@ -9,17 +9,19 @@ foreach(_test IN LISTS _tests)
   add_executable(${_test} ${_test}.c)
 
   target_include_directories(${_test}
-    PRIVATE
-      ${JANSSON_INCLUDE_DIRS})
+    PRIVATE)
 
   target_link_libraries(${_test}
-    core
-    ${JANSSON_LDFLAGS})
+    core)
 endforeach()
 
 add_executable(test_btree_new btree/btree_main_test.c)
 target_link_libraries(test_btree_new
   core)
+
+add_executable(test_layerlist layerlist/layerlist_main_test.c)
+target_link_libraries(test_layerlist
+        core)
 
 enable_testing()
 
@@ -38,3 +40,7 @@ add_test(
 add_test(
   NAME test_btree_new
   COMMAND $<TARGET_FILE:test_btree_new>)
+
+add_test(
+        NAME test_layerlist
+        COMMAND $<TARGET_FILE:test_layerlist>)

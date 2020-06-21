@@ -16,6 +16,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
     message(STATUS "Detected GNU compiler. Using specific flags.")
     set(CMAKE_C_FLAGS_DEBUG "-pipe -Wall -Wextra -Wpedantic -O0 -ggdb")
     set(CMAKE_C_FLAGS_RELEASE "-pipe -march=native -O3")
+    set(CMAKE_C_FLAGS "-Wno-unused-parameter")
 endif()
 
 find_package(PkgConfig REQUIRED)
