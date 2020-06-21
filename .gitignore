@@ -78,3 +78,4 @@ bin/reg*
 bin/add*
 bin/list*
 bin/search*
+tmp/

@@ -2,12 +2,15 @@
 #include "layerlist.h"
 #include "merge_sort.h"
 
-static gint comparator(gconstpointer a, gconstpointer b, gpointer user_data)
-{
-  const gint *one = a;
-  const gint *two = b;
+inline static void llist_free_item(gpointer data, gpointer arg) {
+  LListItem *item = data;
 
-  return *one - *two;
+  if (item->list->item_destroy_func) {
+      item->list->item_destroy_func(item->data);
+    }
+
+  // g_print("\t==> Free memory for list item at %p\n", (gpointer ) item);
+  g_free(item);
 }
 
 LList* llist_new(GDestroyNotify item_destroy_func) {
