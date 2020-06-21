@@ -1,48 +1,46 @@
 #ifndef _LAYERLIST_H_
 #define _LAYERLIST_H_
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
+#include <glib.h>
 
 typedef struct _LList LList;
 typedef struct _LListItem LListItem;
 
-typedef void (*EachCb) (void *data, void *context);
+typedef void (*EachCb) (gpointer data, gpointer context);
 
 struct _LListItem {
     LListItem *next;
     LList *list;
-    void *data;
+    gpointer data;
 };
 
 struct _LList {
     LListItem *first;
-    EachCb freeCb;
+    GDestroyNotify item_destroy_func;
 };
 
 
-inline static void blist_free_item(LListItem *item, void *arg) {
-  if (item->list->freeCb) {
-      item->list->freeCb(item->data, (void *) NULL);
+inline static void blist_free_item(LListItem *item, gpointer arg) {
+  if (item->list->item_destroy_func) {
+      item->list->item_destroy_func(item->data);
     }
-  printf("\t==> Free memory for list item at %p\n", (void *) item);
-  free(item);
+  g_print("\t==> Free memory for list item at %p\n", (gpointer ) item);
+  g_free(item);
 }
 
-LList* blist_new(EachCb freeCb);
+LList* blist_new(GDestroyNotify item_destroy_func);
 
-LListItem* blist_item_new(void *data);
+LListItem* blist_item_new(gpointer data);
 
-LListItem* blist_add_tail(LList *list, void *data);
+LListItem* blist_add_tail(LList *list, gpointer data);
 
-LListItem* blist_add_head(LList *list, void *data);
+LListItem* blist_add_head(LList *list, gpointer data);
 
-LListItem* blist_add_after(LListItem *item, void *data);
+LListItem* blist_add_after(LListItem *item, gpointer data);
 
 LListItem* blist_remove(LListItem *item);
 
-void blist_each(LList *list, EachCb cb, void *data);
+void blist_each(LList *list, EachCb cb, gpointer data);
 
 void blist_free(LList *list);
 
