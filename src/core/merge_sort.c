@@ -6,7 +6,7 @@
 
 #define array_idx_ptr(arr, idx, size) ((char *) arr + idx * size)
 
-void merge_sort(gpointer values, gpointer buff, gsize size, gsize start, gsize end, merge_sort_comparator comparator)
+void merge_sort(gpointer values, gpointer buff, gsize size, gsize start, gsize end, GCompareFunc comparator)
 {
   if (start == end) {
     return;
