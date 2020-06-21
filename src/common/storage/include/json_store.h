@@ -1,6 +1,6 @@
-#include <jansson.h>
+#include "jansson.h"
 
-#include "../data.h"
+#include "../../include/data.h"
 
 #define CLIENT_NAME "name"
 #define CLIENT_LICENSE "license"

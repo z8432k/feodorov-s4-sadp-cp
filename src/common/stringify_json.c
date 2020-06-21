@@ -1,5 +1,5 @@
-#include "include/stringify_json.h"
-#include "include/storage/json_store.h"
+#include "stringify_json.h"
+#include "json_store.h"
 
 gchar* clients_stringify_json(RawData_t *data)
 {

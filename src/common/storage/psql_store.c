@@ -1,4 +1,4 @@
-#include "../include/storage/pgsql_store.h"
+#include "pgsql_store.h"
 
 static const gchar *uri = "postgresql://localhost/rentcar";
 
