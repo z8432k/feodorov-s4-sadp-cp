@@ -54,8 +54,10 @@ static void remove_test(LList **list, gconstpointer ignored)
 }
 
 static gint comparator(gconstpointer a, gconstpointer b) {
-  const LListItem **aptr = (const LListItem **) a, **bptr = (const LListItem **) b;
-  const gint *aval = (*aptr)->data, *bval = (*bptr)->data;
+  const LListItem **aptr = (const LListItem **) a,
+    **bptr = (const LListItem **) b;
+  const gint *aval = (*aptr)->data,
+    *bval = (*bptr)->data;
 
   if (*aval > *bval) {
     return 1;
