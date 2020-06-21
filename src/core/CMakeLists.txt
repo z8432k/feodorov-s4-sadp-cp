@@ -20,6 +20,16 @@ target_include_directories(hashtab
         ${GLIB2_INCLUDE_DIRS})
 
 
+add_library(layerlist
+        OBJECT
+        layerlist.c)
+target_include_directories(layerlist
+        PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/include
+        ${GLIB2_INCLUDE_DIRS})
+target_compile_options(layerlist PRIVATE "-Wno-unused-parameter")
+
+
 add_library(merge_sort
         OBJECT
         merge_sort.c)
@@ -33,7 +43,8 @@ add_library(core
         STATIC
         $<TARGET_OBJECTS:hashtab>
         $<TARGET_OBJECTS:btree>
-        $<TARGET_OBJECTS:merge_sort>)
+        $<TARGET_OBJECTS:merge_sort>
+        $<TARGET_OBJECTS:layerlist>)
 target_link_libraries(core
         INTERFACE
         ${GLIB2_LDFLAGS})
