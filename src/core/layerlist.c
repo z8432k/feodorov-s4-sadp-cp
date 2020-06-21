@@ -79,13 +79,13 @@ LListItem* llist_add_after(LListItem *item, gpointer data) {
 
 LListItem* llist_remove(LListItem *item) {
   if (item->list->first == item) {
-      if (item->next) {
-          item->list->first = item->next;
-        }
-      else {
-          item->list->first = NULL;
-        }
+    if (item->next) {
+      item->list->first = item->next;
     }
+    else {
+      item->list->first = NULL;
+    }
+  }
 
   return item;
 }
@@ -94,12 +94,12 @@ void llist_foreach(LList *list, GFunc cb, gpointer data) {
   LListItem *current = list->first;
 
   while (current) {
-      LListItem *target = current;
+    LListItem *target = current;
 
-      current = current->next;
+    current = current->next;
 
-      cb(target, data);
-    }
+    cb(target, data);
+  }
 }
 
 void llist_destroy(LList *list) {

@@ -7,17 +7,17 @@ typedef struct _LList LList;
 typedef struct _LListItem LListItem;
 
 struct _LListItem {
-    LListItem *next_l2;
-    LListItem *next_l1;
-    LListItem *next;
-    LList *list;
-    gpointer data;
+  LListItem *next_l2;
+  LListItem *next_l1;
+  LListItem *next;
+  LList *list;
+  gpointer data;
 };
 
 struct _LList {
-    LListItem *first;
-    LListItem *last;
-    GDestroyNotify item_destroy_func;
+  LListItem *first;
+  LListItem *last;
+  GDestroyNotify item_destroy_func;
 };
 
 
@@ -25,8 +25,9 @@ inline static void llist_free_item(gpointer data, gpointer arg) {
   LListItem *item = data;
 
   if (item->list->item_destroy_func) {
-      item->list->item_destroy_func(item->data);
-    }
+    item->list->item_destroy_func(item->data);
+  }
+
   g_print("\t==> Free memory for list item at %p\n", (gpointer ) item);
   g_free(item);
 }
