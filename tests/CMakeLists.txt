@@ -10,18 +10,16 @@ foreach(_test IN LISTS _tests)
 
   target_include_directories(${_test}
     PRIVATE
-      ${GLIB2_INCLUDE_DIRS}
       ${JANSSON_INCLUDE_DIRS})
 
   target_link_libraries(${_test}
-    common
-    ${GLIB2_LDFLAGS}
+    core
     ${JANSSON_LDFLAGS})
 endforeach()
 
 add_executable(test_btree_new btree/btree_main_test.c)
 target_link_libraries(test_btree_new
-  common)
+  core)
 
 enable_testing()
 

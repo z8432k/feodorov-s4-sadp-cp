@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../src/include/btree.h"
+#include "btree.h"
 
 static gint src[] = {1, 5, 16, 2, 99, 68, 36, 86, 79, 52, 14, 9, 7, 0};
 

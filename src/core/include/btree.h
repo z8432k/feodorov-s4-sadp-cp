@@ -3,7 +3,6 @@
 
 #include <glib.h>
 
-#define btree_node_new() (g_new0(BTreeNode, 1))
 #define btree_new(comparator) (btree_new_full(comparator, NULL, NULL))
 
 typedef struct __BTree BTree;
@@ -14,15 +13,6 @@ struct __BTree {
     GCompareDataFunc comparator;
     GDestroyNotify key_destroy_func;
     GDestroyNotify value_destroy_func;
-};
-
-struct __BTreeNode {
-    BTree *tree;
-    gpointer key;
-    gpointer value;
-    BTreeNode *parent;
-    BTreeNode *left;
-    BTreeNode *right;
 };
 
 BTree* btree_new_full(GCompareDataFunc comparator, GDestroyNotify key_destroy_func, GDestroyNotify value_destroy_func);

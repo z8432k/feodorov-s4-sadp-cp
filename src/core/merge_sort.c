@@ -1,4 +1,4 @@
-#include "include/merge_sort.h"
+#include "merge_sort.h"
 #include <memory.h>
 
 #define array_idx_cpy(to, from, to_idx, from_idx, size) \

@@ -39,14 +39,6 @@ target_include_directories(pgsql_store
         ${GLIB2_INCLUDE_DIRS}
         ${PGSQL_INCLUDE_DIRS})
 
-add_library(btree
-        OBJECT
-        include/btree.h
-        btree.c)
-target_include_directories(btree
-        PRIVATE
-        ${GLIB2_INCLUDE_DIRS})
-
 add_library(client
         OBJECT
         include/client.h
@@ -81,22 +73,6 @@ target_include_directories(stringify_json
         ${GLIB2_INCLUDE_DIRS}
         ${JANSSON_INCLUDE_DIRS})
 
-add_library(hashtab
-        OBJECT
-        include/hashtab.h
-        hashtab.c)
-target_include_directories(hashtab
-        PRIVATE
-        ${GLIB2_INCLUDE_DIRS})
-
-add_library(merge_sort
-        OBJECT
-        include/merge_sort.h
-        merge_sort.c)
-target_include_directories(merge_sort
-        PRIVATE
-        ${GLIB2_INCLUDE_DIRS})
-
 add_library(common
         STATIC
         $<TARGET_OBJECTS:data>
@@ -105,10 +81,7 @@ add_library(common
         $<TARGET_OBJECTS:client>
         $<TARGET_OBJECTS:car>
         $<TARGET_OBJECTS:rentrow>
-        $<TARGET_OBJECTS:stringify_json>
-        $<TARGET_OBJECTS:hashtab>
-        $<TARGET_OBJECTS:btree>
-        $<TARGET_OBJECTS:merge_sort>)
+        $<TARGET_OBJECTS:stringify_json>)
 target_link_libraries(common
         INTERFACE
         ${GLIB2_LDFLAGS}
@@ -139,3 +112,5 @@ foreach(_target IN LISTS _targets)
   target_link_libraries(${_target}
           common)
 endforeach()
+
+add_subdirectory(core)

@@ -1,4 +1,4 @@
-#include "include/hashtab.h"
+#include "hashtab.h"
 
 // TODO: Automatic re-hash
 #define HASH_TAB_INIT_SIZE 256
