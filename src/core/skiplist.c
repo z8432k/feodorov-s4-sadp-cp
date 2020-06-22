@@ -5,7 +5,7 @@ static inline gsize skiplist_new_level()
 {
   gsize level;
 
-  for (level = 0; rand() < RAND_MAX/2 && level < SLIST_MAXLEVEL; level++);
+  for (level = 0; rand() < RAND_MAX/2 && level < SLIST_LEVELS - 1; level++);
 
   return level;
 }
@@ -14,7 +14,7 @@ SListItem* skiplist_new_item(SList *list, gpointer data, gsize level)
 {
   SListItem *item = g_new0(SListItem, 1);
 
-  item->forward = g_new(SListItem*, level);
+  item->forward = g_new(SListItem*, level + 1);
   item->data = data;
   item->list = list;
 
@@ -37,9 +37,9 @@ SList* skiplist_new_full(GCompareFunc comparator, GDestroyNotify item_destroy_fu
   list->comparator = comparator;
   list->item_destroy_func = item_destroy_func;
   list->level = 0;
-  list->head = skiplist_new_item(list,NULL, SLIST_MAXLEVEL);
+  list->head = skiplist_new_item(list,NULL, SLIST_LEVELS - 1);
 
-  for (gsize i = 0; i < SLIST_MAXLEVEL; i++) {
+  for (gsize i = 0; i < SLIST_LEVELS; i++) {
     list->head->forward[i] = NIL;
   }
 
@@ -52,29 +52,30 @@ void skiplist_destroy(SList *list)
   g_free(list);
 }
 
-SListItem* skiplist_add(SList *list, gpointer data)
+SListItem* skiplist_add(SList *list, gint *data)
 {
-  SListItem *update[SLIST_MAXLEVEL];
+  SListItem *update[SLIST_LEVELS];
   SListItem *current = list->head;
 
-  for (gssize curLevel = list->level; curLevel >= 0; curLevel--) {
+  for (gssize cur_lvl = list->level; cur_lvl >= 0; cur_lvl--) {
 
-    SListItem *next = current->forward[curLevel];
+    SListItem *next = current->forward[cur_lvl];
 
     while (next != NIL && list->comparator(next->data, data) < 0) {
       current = next;
-      next = current->forward[curLevel];
+      next = current->forward[cur_lvl];
     }
 
-    update[curLevel] = current;
+    update[cur_lvl] = current;
   }
 
-  current = current->forward[0];
+  SListItem *bottom_next = current->forward[0];
 
-  if (current != NIL && !list->comparator(current->data, data)) {
-    current->data = data;
+  // Next item is target key
+  if (bottom_next != NIL && !list->comparator(bottom_next->data, data)) {
+      bottom_next->data = data;
 
-    return current;
+    return bottom_next;
   }
 
   gsize new_level = skiplist_new_level();
@@ -88,7 +89,7 @@ SListItem* skiplist_add(SList *list, gpointer data)
     list->level = new_level;
   }
 
-  for (gsize i = 0; i < new_level; i++) {
+  for (gsize i = 0; i <= new_level; i++) {
     new_item->forward[i] = update[i]->forward[i];
     update[i]->forward[i] = new_item;
   }

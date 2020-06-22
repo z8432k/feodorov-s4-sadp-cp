@@ -3,7 +3,7 @@
 
 #include <glib.h>
 
-#define SLIST_MAXLEVEL 5
+#define SLIST_LEVELS 5
 #define NIL list->head
 
 typedef struct __SListItem SListItem;
@@ -17,7 +17,7 @@ typedef struct __SList {
 
 typedef struct __SListItem {
     SList *list;
-    gpointer data;
+    gint *data;
     SListItem **forward;
 } SListItem;
 
@@ -29,7 +29,7 @@ void skiplis_free_item(SListItem *item);
 
 void skiplist_destroy(SList *list);
 
-SListItem* skiplist_add(SList *list, gpointer data);
+SListItem* skiplist_add(SList *list, gint *data);
 
 void skiplist_foreach(SList *list, GFunc func, gpointer user_data);
 
