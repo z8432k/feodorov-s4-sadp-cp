@@ -8,6 +8,10 @@ list(APPEND _tests
 foreach(_test IN LISTS _tests)
   add_executable(${_test} ${_test}.c)
 
+  target_compile_options(${_test}
+          PRIVATE
+          "-Wno-unused-function -Wno-unused-variable")
+
   target_include_directories(${_test}
     PRIVATE)
 
@@ -21,6 +25,13 @@ target_link_libraries(test_btree_new
 
 add_executable(test_layerlist layerlist/layerlist_main_test.c)
 target_link_libraries(test_layerlist
+        core)
+
+add_executable(test_skiplist skiplist/skiplist_main_test.c)
+target_compile_options(test_skiplist
+        PRIVATE
+        "-Wno-unused-function" "-Wno-unused-variable")
+target_link_libraries(test_skiplist
         core)
 
 enable_testing()
@@ -44,3 +55,7 @@ add_test(
 add_test(
         NAME test_layerlist
         COMMAND $<TARGET_FILE:test_layerlist>)
+
+add_test(
+        NAME test_skiplist
+        COMMAND $<TARGET_FILE:test_skiplist>)

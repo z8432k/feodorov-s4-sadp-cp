@@ -27,6 +27,13 @@ target_include_directories(layerlist
         ${CMAKE_CURRENT_LIST_DIR}/include
         ${GLIB2_INCLUDE_DIRS})
 
+add_library(skiplist
+        OBJECT
+        skiplist.c)
+target_include_directories(skiplist
+        PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/include
+        ${GLIB2_INCLUDE_DIRS})
 
 add_library(merge_sort
         OBJECT
@@ -42,7 +49,8 @@ add_library(core
         $<TARGET_OBJECTS:hashtab>
         $<TARGET_OBJECTS:btree>
         $<TARGET_OBJECTS:merge_sort>
-        $<TARGET_OBJECTS:layerlist>)
+        $<TARGET_OBJECTS:layerlist>
+        $<TARGET_OBJECTS:skiplist>)
 target_link_libraries(core
         INTERFACE
         ${GLIB2_LDFLAGS})
