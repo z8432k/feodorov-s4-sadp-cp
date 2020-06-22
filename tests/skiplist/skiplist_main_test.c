@@ -1,11 +1,11 @@
 #include "skiplist.h"
+#include <math.h>
 
-static gint src[] = {5, 1, 32, 8, 150, 100, 99};
-static gint src2[] = { 28 };
-static gchar *data[] = { "1", "222", "333", "\0" };
+static double src[] = {5, 1, 32, 8, 150, 100, 99, NAN};
+static double test[] = { 1, 5, 8, 32, 99, 100, 150, NAN };
 
 static gint comparator(gconstpointer a, gconstpointer b) {
-  const gint *aval =  a,
+  const double *aval =  a,
       *bval = b;
 
   if (*aval > *bval) {
@@ -20,8 +20,16 @@ static gint comparator(gconstpointer a, gconstpointer b) {
 
 static void print_list_item(gpointer i, gpointer data)
 {
-  gint *item = i;
-  g_print("%d\n", *item);
+  double *item = i;
+  g_print("%f\n", *item);
+}
+
+static void match_item(double *i, gpointer data)
+{
+  gsize *j = data;
+
+  g_assert(*i == test[*j]);
+  (*j)++;
 }
 
 static void new_list(SList **list, gconstpointer ignored) {
@@ -39,17 +47,17 @@ static void create_test(SList **list, gconstpointer data)
 
 static void add_test(SList **list, gconstpointer ignored)
 {
-  for (gsize i = 0; i < 7; i++) {
+  for (gsize i = 0; !isnan(src[i]); i++) {
     skiplist_add(*list, &src[i]);
   }
 
-  g_print("\n");
-  skiplist_foreach(*list, print_list_item, NULL);
+  gsize counter = 0;
+  skiplist_foreach(*list, match_item, &counter);
 }
 
 static void remove_test(SList **list, gconstpointer ignored)
 {
-  for (gsize i = 0; src[i] != 0; i++) {
+  for (gsize i = 0; !isnan((double) src[i]); i++) {
     // skiplist_add(*list, &src[i]);
   }
 }

@@ -52,7 +52,7 @@ void skiplist_destroy(SList *list)
   g_free(list);
 }
 
-SListItem* skiplist_add(SList *list, gint *data)
+SListItem* skiplist_add(SList *list, double *data)
 {
   SListItem *update[SLIST_LEVELS];
   SListItem *current = list->head;

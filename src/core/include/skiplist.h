@@ -17,7 +17,7 @@ typedef struct __SList {
 
 typedef struct __SListItem {
     SList *list;
-    gint *data;
+    double *data;
     SListItem **forward;
 } SListItem;
 
@@ -29,7 +29,7 @@ void skiplis_free_item(SListItem *item);
 
 void skiplist_destroy(SList *list);
 
-SListItem* skiplist_add(SList *list, gint *data);
+SListItem* skiplist_add(SList *list, double *data);
 
 void skiplist_foreach(SList *list, GFunc func, gpointer user_data);
 
