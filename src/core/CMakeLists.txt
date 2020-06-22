@@ -43,6 +43,13 @@ target_include_directories(merge_sort
         ${CMAKE_CURRENT_LIST_DIR}/include
         ${GLIB2_INCLUDE_DIRS})
 
+add_library(wordsearch
+        OBJECT
+        wordsearch.c)
+target_include_directories(wordsearch
+        PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/include
+        ${GLIB2_INCLUDE_DIRS})
 
 add_library(core
         STATIC
@@ -50,7 +57,8 @@ add_library(core
         $<TARGET_OBJECTS:btree>
         $<TARGET_OBJECTS:merge_sort>
         $<TARGET_OBJECTS:layerlist>
-        $<TARGET_OBJECTS:skiplist>)
+        $<TARGET_OBJECTS:skiplist>
+        $<TARGET_OBJECTS:wordsearch>)
 target_link_libraries(core
         INTERFACE
         ${GLIB2_LDFLAGS})

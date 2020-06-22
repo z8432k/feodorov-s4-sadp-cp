@@ -34,6 +34,13 @@ target_compile_options(test_skiplist
 target_link_libraries(test_skiplist
         core)
 
+add_executable(test_wordsearch wordsearch/wordsearch_main_test.c)
+target_compile_options(test_wordsearch
+        PRIVATE
+        "-Wno-unused-function" "-Wno-unused-variable")
+target_link_libraries(test_wordsearch
+        core)
+
 enable_testing()
 
 add_test(
@@ -59,3 +66,7 @@ add_test(
 add_test(
         NAME test_skiplist
         COMMAND $<TARGET_FILE:test_skiplist>)
+
+add_test(
+        NAME test_wordsearch
+        COMMAND gtester --verbose $<TARGET_FILE:test_wordsearch>)
