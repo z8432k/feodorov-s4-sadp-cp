@@ -197,3 +197,37 @@ gssize get_car_impl(Car_t *car) {
 
   return 0;
 }
+
+RawData_t* load_data_impl()
+{
+  PGconn *conn = pgGetConnection();
+
+  RawData_t *data = new_data();
+
+  // load cars
+  res = PQexec(conn, select_cars_sql);
+
+  if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+    gsize rows = PQntuples(res);
+
+    Car_t *car;
+    for (gsize i = 0; i < rows; i++) {
+      car = new_car();
+
+      fill_car(car,
+        PQgetvalue(res, i, 1),
+        PQgetvalue(res, i, 2),
+        PQgetvalue(res, i, 3),
+        atoi(PQgetvalue(res, i, 4)),
+        to_bool(PQgetvalue(res, i, 4))
+      );
+
+      g_array_append_val(data->cars, car);
+    }
+  }
+  else {
+    pg_error_exit();
+  }
+
+  return data;
+}

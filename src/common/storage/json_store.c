@@ -129,7 +129,7 @@ void save_data(RawData_t *data)
   json_decref(root);
 }
 
-RawData_t *load_data()
+RawData_t *load_data_()
 {
   RawData_t *data = new_data();
 

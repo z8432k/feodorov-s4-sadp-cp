@@ -18,6 +18,7 @@ typedef struct {
 typedef void* (* dataSearchFunc_t)(Data_t *data, GString *license);
 
 RawData_t* new_data();
+RawData_t* data_load();
 void free_data(RawData_t *data);
 
 void data_add_client(Client_t *client);

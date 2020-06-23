@@ -25,6 +25,6 @@ json_t* data_array_to_json_array(GArray *array, jsonFromData builder);
 json_t* json_build_client(Client_t *data);
 json_t* json_build_car(Car_t *data);
 
-RawData_t* load_data();
+RawData_t* load_data_();
 void save_data(RawData_t *data);
 

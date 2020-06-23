@@ -11,5 +11,5 @@ int main(void)
 {
   setlocale(LC_ALL, "");
 
-  printf("%s\n", cars_stringify_json(load_data()));
+  printf("%s\n", cars_stringify_json(data_load()));
 }
