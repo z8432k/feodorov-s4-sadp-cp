@@ -57,3 +57,8 @@ gssize data_drop_car(const gchar *number)
 {
   return drop_car_impl(number);
 }
+
+gssize data_service_car(const gchar *number, const gboolean flag)
+{
+  return service_car_impl(number, flag);
+}

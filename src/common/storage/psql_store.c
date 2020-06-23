@@ -11,7 +11,7 @@ static gchar *select_car_sql = "SELECT * FROM cars WHERE car_number = $1;";
 static gchar *insert_car_sql = "INSERT INTO cars (car_number, model, color, year) VALUES ($1, $2, $3, $4);";
 static gchar *delete_cars_sql = "DELETE from cars WHERE 1 = 1;";
 static gchar *delete_car_sql = "DELETE FROM cars WHERE car_number = $1 RETURNING *;";
-static gchar *service_car_sql = "UPDATE cars SET exi = $1 WHERE car_number = $2;";
+static gchar *service_car_sql = "UPDATE cars SET exi = $2 WHERE car_number = $1;";
 
 
 static gchar *all_clients_sql = "select * from clients;";
@@ -276,5 +276,29 @@ gssize drop_car_impl(const gchar *number)
     errno = ENOENT;
     perror("");
     return 1;
+  }
+}
+
+gssize service_car_impl(const gchar *number, const gboolean flag)
+{
+  PGconn *conn = pgGetConnection();
+
+  const gchar *params[2] = {
+      number,
+      flag ? "t" : "f"
+  };
+
+  res = PQexecParams(conn, service_car_sql,
+                     2, NULL, params, NULL, NULL, 0);
+
+  if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+    pg_error_exit();
+
+    return -1;
+  }
+  else {
+    pg_normal_exit();
+
+    return 0;
   }
 }

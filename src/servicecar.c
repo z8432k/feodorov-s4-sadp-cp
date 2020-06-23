@@ -3,24 +3,20 @@
 #include <locale.h>
 #include <glib.h>
 
-#include "storage/include/json_store.h"
+#include "data.h"
 
 #define GETTEXT_PACKAGE "gtk20"
 
-typedef struct {
-    gchar *number;
-    gboolean exists;
-} InputData_t;
-
-static InputData_t inputData;
+static gchar *number;
+static gboolean exists;
 
 static GOptionEntry entries[] =
 {
-  { "number", 'n', 0, G_OPTION_ARG_NONE, &inputData.number,
+  { "number", 'n', 0, G_OPTION_ARG_STRING, &number,
                 "Государственный номер",
                 "ANNNAA-NN" },
 
-  { "service", 's', 0, G_OPTION_ARG_INT, &inputData.exists,
+  { "service", 's', 0, G_OPTION_ARG_INT, &exists,
           "Признак ремонта",
           "1" },
 
@@ -42,6 +38,11 @@ int main(int argc, char *argv[])
     exit (1);
   }
 
-  printf("Not implemented.\n");
+  if (!number) {
+    g_printerr("Вы должны указать как минимум номер автомобиля");
+    exit(1);
+  }
+
+  data_service_car(number, !exists);
 }
 

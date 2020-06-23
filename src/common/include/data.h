@@ -23,6 +23,7 @@ void free_data(RawData_t *data);
 gsize data_add_car(Car_t *car);
 gssize data_drop_car(const gchar *number);
 gssize data_drop_cars();
+gssize data_service_car(const gchar *number, const gboolean flag);
 
 
 
