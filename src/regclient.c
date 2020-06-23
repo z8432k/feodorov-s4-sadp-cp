@@ -22,7 +22,7 @@ static GOptionEntry entries[] =
 
   { "license", 'l', 0, G_OPTION_ARG_STRING, &srcClient.license,
                 "Номер водительского удостоверения в формате: 78 AВ 123456",
-                "78 AВ 123456" },
+                "78тт123456" },
 
   { "passport", 'p', 0, G_OPTION_ARG_STRING, &srcClient.passport,
                 "Паспортные данные",
@@ -34,17 +34,6 @@ static GOptionEntry entries[] =
 
   { NULL }
 };
-
-static inline void reg_client(Client_t *client)
-{
-  RawData_t *data = load_data();
-
-  data_add_client(data, client);
-
-  save_data(data);
-
-  free_data(data);
-}
 
 int main(int argc, char *argv[])
 {
@@ -61,6 +50,11 @@ int main(int argc, char *argv[])
     exit (1);
   }
 
+  if (!srcClient.name || !srcClient.license || !srcClient.passport || !srcClient.address) {
+    g_printerr("Вы должны указать все необходимые данные для регистрации клиента.\n");
+    exit(0);
+  }
+
   Client_t *newClient = new_client();
 
   fill_client(newClient,
@@ -70,6 +64,15 @@ int main(int argc, char *argv[])
     srcClient.address
   );
 
-  reg_client(newClient);
+  gsize code = data_add_client(newClient);
+
+  free_client(newClient);
+
+  if (code == 0) {
+    exit(0);
+  }
+  else {
+    exit(1);
+  }
 }
 

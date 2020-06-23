@@ -9,7 +9,7 @@ typedef struct {
 
 Client_t* new_client();
 
-void free_client(gpointer client);
+void free_client(Client_t *client);
 
 void fill_client(
   Client_t *client,

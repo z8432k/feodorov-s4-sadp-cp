@@ -8,7 +8,7 @@ RawData_t* new_data()
   RawData_t *data = g_new(RawData_t, 1);
 
   data->clients = g_array_new(TRUE, TRUE, sizeof(Client_t *));
-  g_array_set_clear_func(data->clients, free_client);
+  g_array_set_clear_func(data->clients, (GDestroyNotify) free_client);
 
   data->cars = g_array_new(TRUE, TRUE, sizeof(Car_t *));
   g_array_set_clear_func(data->cars, (GDestroyNotify) free_car);
@@ -28,12 +28,12 @@ RawData_t* data_load() {
   return load_data_impl();
 }
 
-void data_add_client(Client_t *client)
+gssize data_add_client(const Client_t *client)
 {
-  // g_array_append_val(data->clients, client);
+  return add_client_impl(client);
 }
 
-gsize data_add_car(Car_t *car)
+gssize data_add_car(const Car_t *car)
 {
   return add_car_impl(car);
 }

@@ -13,6 +13,9 @@ static gchar *delete_cars_sql = "DELETE from cars WHERE 1 = 1;";
 static gchar *delete_car_sql = "DELETE FROM cars WHERE car_number = $1 RETURNING *;";
 static gchar *service_car_sql = "UPDATE cars SET exi = $2 WHERE car_number = $1;";
 
+// CLIENTS
+static gchar *insert_client_sql = "INSERT INTO clients (client_name, license, passport, address) VALUES ($1, $2, $3, $4);";
+
 
 static gchar *all_clients_sql = "select * from clients;";
 static gchar *all_rent_rows_sql = "select * from rents;";
@@ -147,7 +150,7 @@ RawData_t* load_data_pgsql()
   return 0;
 }
 
-gssize add_car_impl(Car_t *car)
+gssize add_car_impl(const Car_t *car)
 {
   GString *year = g_string_new("");
   g_string_printf(year, "%d", car->year);
@@ -301,4 +304,29 @@ gssize service_car_impl(const gchar *number, const gboolean flag)
 
     return 0;
   }
+}
+
+gssize add_client_impl(const Client_t *client)
+{
+  const gchar *params[4] = {
+      client->name->str,
+      client->license->str,
+      client->passport->str,
+      client->address->str
+  };
+
+  PGconn *conn = pgGetConnection();
+
+  res = PQexecParams(conn, insert_client_sql, 4, NULL, params, NULL, NULL, 0);
+
+  if (PQresultStatus(res) == PGRES_COMMAND_OK) {
+    pg_normal_exit();
+  }
+  else {
+    pg_error_exit();
+
+    return -1;
+  }
+
+  return 0;
 }
