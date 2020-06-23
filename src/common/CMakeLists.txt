@@ -1,7 +1,6 @@
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE  ON)
 
 pkg_check_modules(JANSSON REQUIRED jansson)
-# pkg_check_modules(SQLITE REQUIRED sqlite3)
 pkg_check_modules(PGSQL REQUIRED libpq)
 
 add_library(data
@@ -10,6 +9,7 @@ add_library(data
 target_include_directories(data
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
+        ${CMAKE_CURRENT_LIST_DIR}/storage/include
         ${GLIB2_INCLUDE_DIRS})
 
 add_library(json_store
@@ -21,20 +21,12 @@ target_include_directories(json_store
         ${GLIB2_INCLUDE_DIRS}
         ${JANSSON_INCLUDE_DIRS})
 
-add_library(sqlite_store
-        OBJECT
-        storage/sqlite_store.c)
-target_include_directories(sqlite_store
-        PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/storage/include
-        ${GLIB2_INCLUDE_DIRS}
-        ${SQLITE_INCLUDE_DIRS})
-
 add_library(pgsql_store
         OBJECT
         storage/psql_store.c)
 target_include_directories(pgsql_store
         PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/include
         ${CMAKE_CURRENT_LIST_DIR}/storage/include
         ${GLIB2_INCLUDE_DIRS}
         ${PGSQL_INCLUDE_DIRS})

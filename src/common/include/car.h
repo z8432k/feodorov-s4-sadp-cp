@@ -10,7 +10,7 @@ typedef struct {
 
 Car_t* new_car();
 
-void free_car(gpointer car);
+void free_car(Car_t *car);
 
 void fill_car(
   Car_t *car,

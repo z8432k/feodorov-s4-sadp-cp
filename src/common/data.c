@@ -1,5 +1,7 @@
 #include "data.h"
 
+#include <psql_store.h>
+
 // Raw data
 RawData_t* new_data()
 {
@@ -22,14 +24,14 @@ void free_data(RawData_t *data)
   g_free(data);
 }
 
-void data_add_client(RawData_t *data, Client_t *client)
+void data_add_client(Client_t *client)
 {
-  g_array_append_val(data->clients, client);
+  // g_array_append_val(data->clients, client);
 }
 
-void data_add_car(RawData_t *data, Car_t *car)
+gsize data_add_car(Car_t *car)
 {
-  g_array_append_val(data->cars, car);
+  return add_car_impl(car);
 }
 
 void data_truncate_clients(RawData_t *data)

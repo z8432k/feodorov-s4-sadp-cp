@@ -13,18 +13,17 @@ Car_t* new_car()
   return car;
 }
 
-void free_car(gpointer data)
+void free_car(Car_t *car)
 {
-  Car_t **car = (Car_t **) data;
 
-  g_string_free((*car)->number, TRUE);
-  g_string_free((*car)->color, TRUE);
-  g_string_free((*car)->model, TRUE);
+  g_string_free(car->number, TRUE);
+  g_string_free(car->color, TRUE);
+  g_string_free(car->model, TRUE);
 
-  g_free(*car);
+  g_free(car);
 }
 
-void fill_car(Car_t *car, const gchar *number, const gchar *color, const gchar *model, const gushort year, const gboolean exists)
+void fill_car(Car_t *car, const gchar *number, const gchar *model, const gchar *color, const gushort year, const gboolean exists)
 {
   g_string_assign(car->number, number);
   g_string_assign(car->model, model);
