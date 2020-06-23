@@ -88,6 +88,36 @@ COMMENT ON FUNCTION public.cars_delete_check() IS 'Осуществляет пр
 
 
 --
+-- Name: clients_delete_check(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.clients_delete_check() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$DECLARE
+    refs              integer;
+BEGIN
+
+SELECT count(car_number) INTO refs
+	FROM rents
+	WHERE client_license = OLD.license AND return_date IS NULL;
+
+IF refs > 0 THEN
+	RAISE EXCEPTION 'There are rented cars.';
+END IF;
+
+RETURN OLD;
+END;
+$$;
+
+
+--
+-- Name: FUNCTION clients_delete_check(); Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON FUNCTION public.clients_delete_check() IS 'Проверяет возможность удалить клиента';
+
+
+--
 -- Name: rents_car_check_exi(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -389,6 +419,20 @@ CREATE TRIGGER cars_delete_check BEFORE DELETE ON public.cars FOR EACH ROW EXECU
 --
 
 COMMENT ON TRIGGER cars_delete_check ON public.cars IS 'Осуществляет проверку возможности удалить автомобиль.';
+
+
+--
+-- Name: clients clients_delete_check; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER clients_delete_check BEFORE DELETE ON public.clients FOR EACH ROW EXECUTE FUNCTION public.clients_delete_check();
+
+
+--
+-- Name: TRIGGER clients_delete_check ON clients; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TRIGGER clients_delete_check ON public.clients IS 'Выполняет проверку наличия арендованных автомобилей';
 
 
 --
