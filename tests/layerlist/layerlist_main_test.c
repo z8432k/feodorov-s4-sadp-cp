@@ -7,7 +7,7 @@ static gint src2[] = { 28 };
 static void print_list_item(gpointer i, gpointer data)
 {
   LListItem *item = i;
-  g_print("%d\n", *((gint *) item->data));
+  //g_print("%d\n", *((gint *) item->data));
 }
 
 static void new_list(LList **list, gconstpointer ignored) {
@@ -29,7 +29,7 @@ static void insert_head_test(LList **list, gconstpointer ignored)
     llist_add_head(*list, &src[i]);
   }
 
-  g_print("\n");
+  //g_print("\n");
   llist_foreach(*list, print_list_item, NULL);
 }
 
@@ -39,7 +39,7 @@ static void insert_tail_test(LList **list, gconstpointer ignored)
     llist_add_tail(*list, &src[i]);
   }
 
-  g_print("\n");
+  // g_print("\n");
   llist_foreach(*list, print_list_item, NULL);
 }
 
@@ -49,8 +49,8 @@ static void remove_test(LList **list, gconstpointer ignored)
     llist_add_tail(*list, &src[i]);
   }
 
-  g_print("\n");
-  llist_foreach(*list, print_list_item, NULL);
+  // g_print("\n");
+  // llist_foreach(*list, print_list_item, NULL);
 }
 
 static gint comparator(gconstpointer a, gconstpointer b) {
@@ -77,8 +77,8 @@ static void sort_test(LList **list, gconstpointer ignored)
 
   llist_sort(*list, comparator);
 
-  g_print("\n");
-  llist_foreach(*list, print_list_item, NULL);
+  //g_print("\n");
+  //llist_foreach(*list, print_list_item, NULL);
 }
 
 int main(int argc, char *argv[])

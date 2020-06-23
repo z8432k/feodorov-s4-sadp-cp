@@ -9,7 +9,6 @@ inline static void llist_free_item(gpointer data, gpointer arg) {
       item->list->item_destroy_func(item->data);
     }
 
-  // g_print("\t==> Free memory for list item at %p\n", (gpointer ) item);
   g_free(item);
 }
 
@@ -107,7 +106,6 @@ void llist_foreach(LList *list, GFunc cb, gpointer data) {
 
 void llist_destroy(LList *list) {
   llist_foreach(list, llist_free_item, NULL);
-  g_print("\t==> Free memory for list at %p\n", (gpointer) list);
   g_free(list);
 }
 

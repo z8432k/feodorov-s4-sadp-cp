@@ -10,7 +10,7 @@ static gint comparator(gconstpointer a, gconstpointer b, gpointer user_data)
 
 static gboolean print_node(gint key, gint value, gpointer user_data)
 {
-  g_print("KEY: %d, VAL: %d\n", (gint) key, (gint) value);
+  // g_print("KEY: %d, VAL: %d\n", (gint) key, (gint) value);
 
   return FALSE;
 }
@@ -41,7 +41,7 @@ int main(void)
 
   btree_foreach(tree, print_node, NULL);
 
-  g_print("\n");
+  // g_print("\n");
 
   btree_foreach_pre(tree, print_node, NULL);
 

@@ -35,7 +35,7 @@ int main(void) {
     else {
       prev = a[1];
     }
-    g_print("%d\n", a[i]);
+    // g_print("%d\n", a[i]);
   }
 
   return 0;

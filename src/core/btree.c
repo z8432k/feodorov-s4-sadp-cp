@@ -41,7 +41,7 @@ static gboolean btree_free_node(BTreeNode *node, gpointer user_data)
 
   g_free(node);
 
-  g_print("BTreeNode destroyed.\n");
+  // g_print("BTreeNode destroyed.\n");
 
   return FALSE;
 }
@@ -273,7 +273,7 @@ void btree_destroy(BTree *tree)
   }
 
   g_free(tree);
-  g_print("BTree destroyed.\n");
+  // g_print("BTree destroyed.\n");
 }
 
 gpointer btree_lookup(BTree *tree, gconstpointer key)
