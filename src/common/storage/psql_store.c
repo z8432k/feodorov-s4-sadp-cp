@@ -6,7 +6,7 @@
 static const gchar *uri = "postgresql://localhost/rentcar";
 
 // CARS
-static gchar *select_cars_sql = "SELECT * FROM CARS;";
+static gchar *select_cars_sql = "SELECT * FROM cars;";
 static gchar *select_car_sql = "SELECT * FROM cars WHERE car_number = $1;";
 static gchar *insert_car_sql = "INSERT INTO cars (car_number, model, color, year) VALUES ($1, $2, $3, $4);";
 static gchar *delete_cars_sql = "DELETE from cars WHERE 1 = 1;";
@@ -15,10 +15,7 @@ static gchar *service_car_sql = "UPDATE cars SET exi = $2 WHERE car_number = $1;
 
 // CLIENTS
 static gchar *insert_client_sql = "INSERT INTO clients (client_name, license, passport, address) VALUES ($1, $2, $3, $4);";
-
-
-static gchar *all_clients_sql = "select * from clients;";
-static gchar *all_rent_rows_sql = "select * from rents;";
+static gchar *select_clients_sql = "SELECT * from clients;";
 
 static PGconn *connection;
 
@@ -82,72 +79,6 @@ PGconn* pgGetConnection()
   }
 
   return connection;
-}
-
-void save_data_pgsql(RawData_t *data)
-{
-  pgGetConnection();
-  printf("Connect.\n");
-}
-
-RawData_t* load_data_pgsql()
-{
-  RawData_t *data = new_data();
-
-  PGconn *conn = pgGetConnection();
-
-  res = PQexec(conn, select_cars_sql);
-
-  if (PQresultStatus(res) != PGRES_TUPLES_OK) {
-
-    g_print("No data retrieved\n");
-    PQclear(res);
-    do_exit(conn);
-  }
-
-  gsize rows = PQntuples(res);
-
-  Car_t *car;
-  gchar *tr;
-  for (gsize i = 0; i < rows; i++) {
-    car = new_car();
-    tr = PQgetvalue(res, i, 5);
-    fill_car(car,
-      PQgetvalue(res, i, 1),
-      PQgetvalue(res, i, 2),
-      PQgetvalue(res, i, 3),
-      atoi(PQgetvalue(res, i, 4)),
-      to_bool(PQgetvalue(res, i, 5))
-    );
-  }
-
-  PQclear(res);
-
-  res = PQexec(conn, all_clients_sql);
-
-  if (PQresultStatus(res) != PGRES_TUPLES_OK) {
-    g_print("No data retrieved\n");
-    PQclear(res);
-    do_exit(conn);
-  }
-
-  rows = PQntuples(res);
-
-  Client_t *client;
-  for (gsize i = 0; i < rows; i++) {
-    client = new_client();
-    tr = PQgetvalue(res, i, 5);
-    fill_client(client,
-      PQgetvalue(res, i, 1),
-      PQgetvalue(res, i, 2),
-      PQgetvalue(res, i, 3),
-      PQgetvalue(res, i, 4)
-    );
-  }
-
-  PQfinish(conn);
-
-  return 0;
 }
 
 gssize add_car_impl(const Car_t *car)
@@ -227,6 +158,30 @@ RawData_t* load_data_impl()
       );
 
       g_array_append_val(data->cars, car);
+    }
+  }
+  else {
+    pg_error_exit();
+  }
+
+  // load cars
+  res = PQexec(conn, select_clients_sql);
+
+  if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+    gsize rows = PQntuples(res);
+
+    Client_t *client;
+    for (gsize i = 0; i < rows; i++) {
+      client = new_client();
+
+      fill_client(client,
+         PQgetvalue(res, i, 1),
+         PQgetvalue(res, i, 2),
+         PQgetvalue(res, i, 3),
+         PQgetvalue(res, i, 4)
+      );
+
+      g_array_append_val(data->clients, client);
     }
 
     pg_normal_exit();
