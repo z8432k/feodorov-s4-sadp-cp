@@ -45,7 +45,7 @@ static GOptionEntry entries[] =
 
 static inline void add_car(Car_t *car)
 {
-  RawData_t *data = load_data();
+  RawData_t *data = load_data_pgsql();
 
   data_add_car(data, car);
 
