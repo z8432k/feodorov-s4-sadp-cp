@@ -27,6 +27,7 @@ COPY public.cars (id, car_number, model, color, year, exi) FROM stdin;
 9	о123тт98	ЗАЗ-969	коричневый	1969	t
 10	р987ав78	стамеска	вишнёвый	2000	t
 11	р765сс78	икарус	красный	1985	t
+19	е333ее88	тарантас	грязный	1970	f
 \.
 
 
@@ -51,6 +52,7 @@ COPY public.rents (id, client_license, car_number, rent_date, return_date) FROM 
 23	78аа123457	а000аа78	2020-06-23	2020-06-23
 25	78аа123456	а000аа78	2020-06-23	2020-06-23
 26	78аа123457	а000аа78	2020-06-23	2020-06-23
+30	00аа000001	е333ее88	2020-06-24	\N
 \.
 
 
@@ -58,7 +60,7 @@ COPY public.rents (id, client_license, car_number, rent_date, return_date) FROM 
 -- Name: cars_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alexander
 --
 
-SELECT pg_catalog.setval('public.cars_id_seq', 11, true);
+SELECT pg_catalog.setval('public.cars_id_seq', 24, true);
 
 
 --
@@ -72,7 +74,7 @@ SELECT pg_catalog.setval('public.clients_id_seq', 8, true);
 -- Name: rents_id_seq; Type: SEQUENCE SET; Schema: public; Owner: alexander
 --
 
-SELECT pg_catalog.setval('public.rents_id_seq', 26, true);
+SELECT pg_catalog.setval('public.rents_id_seq', 30, true);
 
 
 --

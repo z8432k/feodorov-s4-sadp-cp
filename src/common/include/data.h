@@ -20,16 +20,18 @@ typedef void* (* dataSearchFunc_t)(Data_t *data, GString *license);
 RawData_t* new_data();
 RawData_t* data_load();
 void free_data(RawData_t *data);
+gsize data_add_car(Car_t *car);
+gssize data_drop_car(const gchar *number);
+gssize data_drop_cars();
+
+
 
 void data_add_client(Client_t *client);
-gsize data_add_car(Car_t *car);
 
 void data_truncate_clients();
 void data_truncate_cars();
 
 void data_drop_client(GString *license);
-
-void data_drop_car(GString *number);
 
 Client_t* data_search_client_by_license(Data_t *data, GString *license);
 Client_t* data_search_client_by_request(Data_t *data, GString *request);

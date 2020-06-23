@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <glib.h>
 #include "psql_store.h"
+#include <errno.h>
 
 static const gchar *uri = "postgresql://localhost/rentcar";
 
@@ -8,8 +9,8 @@ static const gchar *uri = "postgresql://localhost/rentcar";
 static gchar *select_cars_sql = "SELECT * FROM CARS;";
 static gchar *select_car_sql = "SELECT * FROM cars WHERE car_number = $1;";
 static gchar *insert_car_sql = "INSERT INTO cars (car_number, model, color, year) VALUES ($1, $2, $3, $4);";
-static gchar *truncate_cars_sql = "TRUNCATE TABLE cars;";
-static gchar *delete_car_sql = "DELETE FROM cars WHERE car_number = $1;";
+static gchar *delete_cars_sql = "DELETE from cars WHERE 1 = 1;";
+static gchar *delete_car_sql = "DELETE FROM cars WHERE car_number = $1 RETURNING *;";
 static gchar *service_car_sql = "UPDATE cars SET exi = $1 WHERE car_number = $2;";
 
 
@@ -224,10 +225,56 @@ RawData_t* load_data_impl()
 
       g_array_append_val(data->cars, car);
     }
+
+    pg_normal_exit();
   }
   else {
     pg_error_exit();
   }
 
   return data;
+}
+
+gssize drop_cars_impl()
+{
+  PGconn *conn = pgGetConnection();
+
+  res = PQexec(conn, delete_cars_sql);
+
+  if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+    pg_error_exit();
+
+    return -1;
+  }
+  else {
+    pg_normal_exit();
+
+    return 0;
+  }
+}
+
+gssize drop_car_impl(const gchar *number)
+{
+  PGconn *conn = pgGetConnection();
+
+  res = PQexecParams(conn, delete_car_sql,
+                     1, NULL, &number, NULL, NULL, 0);
+
+  gsize affected = PQntuples(res);
+
+  if (PQresultStatus(res) != PGRES_TUPLES_OK) {
+      pg_error_exit();
+      return -1;
+    }
+  else {
+    pg_normal_exit();
+
+    if (affected > 0) {
+      return 0;
+    }
+
+    errno = ENOENT;
+    perror("");
+    return 1;
+  }
 }

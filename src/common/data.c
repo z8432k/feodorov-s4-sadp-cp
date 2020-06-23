@@ -47,11 +47,13 @@ void data_truncate_clients(RawData_t *data)
   data->clients = empty;
 }
 
-void data_truncate_cars(RawData_t *data)
+
+gssize data_drop_cars()
 {
-  GArray *empty = g_array_new(TRUE, TRUE, sizeof(Car_t *));
+  return drop_cars_impl();
+}
 
-  g_array_free(data->cars, TRUE);
-
-  data->cars = empty;
+gssize data_drop_car(const gchar *number)
+{
+  return drop_car_impl(number);
 }

@@ -58,6 +58,36 @@ COMMENT ON FUNCTION public.car_service_check_in_rent() IS 'Проверяет к
 
 
 --
+-- Name: cars_delete_check(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.cars_delete_check() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$DECLARE
+    refs              integer;
+BEGIN
+
+SELECT count(client_license) INTO refs
+	FROM rents
+	WHERE car_number = OLD.car_number AND return_date IS NULL;
+
+IF refs > 0 THEN
+	RAISE EXCEPTION 'Car % is rented now.', OLD.car_number;
+END IF;
+
+RETURN OLD;
+END;
+$$;
+
+
+--
+-- Name: FUNCTION cars_delete_check(); Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON FUNCTION public.cars_delete_check() IS 'Осуществляет проверку возможности удаления автомобиля.';
+
+
+--
 -- Name: rents_car_check_exi(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -345,6 +375,20 @@ CREATE TRIGGER cars_check_service BEFORE UPDATE ON public.cars FOR EACH ROW EXEC
 --
 
 COMMENT ON TRIGGER cars_check_service ON public.cars IS 'Проверяет связанную таблицу при попытке вернуть автомобиль из ремонта на предмет текущей аренды.';
+
+
+--
+-- Name: cars cars_delete_check; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER cars_delete_check BEFORE DELETE ON public.cars FOR EACH ROW EXECUTE FUNCTION public.cars_delete_check();
+
+
+--
+-- Name: TRIGGER cars_delete_check ON cars; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TRIGGER cars_delete_check ON public.cars IS 'Осуществляет проверку возможности удалить автомобиль.';
 
 
 --

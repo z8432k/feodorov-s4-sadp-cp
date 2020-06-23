@@ -9,12 +9,17 @@
 #include <glib/gi18n-lib.h>
 
 static gboolean all;
+static gchar *number;
 
 static GOptionEntry entries[] =
 {
   { "all", 'a', 0, G_OPTION_ARG_NONE, &all,
                 "Удалить все автомобили",
                 NULL },
+
+  { "number", 'n', 0, G_OPTION_ARG_STRING, &number,
+      "Удалить автомобиль по номеру",
+      NULL },
 
   { NULL }
 };
@@ -34,15 +39,24 @@ int main(int argc, char *argv[])
     exit (1);
   }
 
-  if (all) {
-    RawData_t *data = load_data();
+  gssize code;
 
-    data_truncate_cars(data);
-
-    save_data(data);
+  if (number) {
+    code = data_drop_car(number);
+  }
+  else if (all) {
+    code = data_drop_cars();
   }
   else {
-    printf("Not impolemented.\n");
+    g_printerr("Вы должны указать номер автомобиля или установить флаг удаления всех автомобилей.\n");
+    exit(1);
+  }
+
+  if (code < 0) {
+    exit(1);
+  }
+  else {
+    exit(0);
   }
 }
 
