@@ -62,3 +62,13 @@ gssize data_service_car(const gchar *number, const gboolean flag)
 {
   return service_car_impl(number, flag);
 }
+
+gssize data_drop_client(const gchar *license)
+{
+  return drop_client_impl(license);
+}
+
+gssize data_drop_clients()
+{
+  return drop_clients_impl();
+}

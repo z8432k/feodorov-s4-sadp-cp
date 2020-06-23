@@ -3,11 +3,12 @@
 #include <locale.h>
 #include <glib.h>
 
-#include "storage/include/json_store.h"
+#include "data.h"
 
 #define GETTEXT_PACKAGE "gtk20"
 #include <glib/gi18n-lib.h>
 
+static gchar *license;
 static gboolean all;
 
 static GOptionEntry entries[] =
@@ -15,6 +16,10 @@ static GOptionEntry entries[] =
   { "all", 'a', 0, G_OPTION_ARG_NONE, &all,
                 "Удалить всех клиентов",
                 NULL },
+
+  { "license", 'l', 0, G_OPTION_ARG_STRING, &license,
+      "Удалить клиента по номеру водительского удостоверения",
+      NULL },
 
   { NULL }
 };
@@ -34,15 +39,24 @@ int main(int argc, char *argv[])
     exit (1);
   }
 
-  if (all) {
-    RawData_t *data = load_data();
+  gssize code;
 
-    data_truncate_clients(data);
-
-    save_data(data);
+  if (license) {
+    code = data_drop_client(license);
+  }
+  else if (all) {
+    code = data_drop_clients();
   }
   else {
-    printf("Not impolemented.\n");
+    g_printerr("Вы должны указать номер удостоверения или установить флаг удаления всех клиентов.\n");
+    exit(1);
+  }
+
+  if (code < 0) {
+    exit(1);
+  }
+  else {
+    exit(0);
   }
 }
 

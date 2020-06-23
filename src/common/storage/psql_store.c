@@ -3,7 +3,6 @@
 #include "psql_store.h"
 #include <errno.h>
 
-static const gchar *uri = "postgresql://localhost/rentcar";
 
 // CARS
 static gchar *select_cars_sql = "SELECT * FROM cars;";
@@ -16,6 +15,8 @@ static gchar *service_car_sql = "UPDATE cars SET exi = $2 WHERE car_number = $1;
 // CLIENTS
 static gchar *insert_client_sql = "INSERT INTO clients (client_name, license, passport, address) VALUES ($1, $2, $3, $4);";
 static gchar *select_clients_sql = "SELECT * from clients;";
+static gchar *delete_clients_sql = "DELETE from clients WHERE 1 = 1;";
+static gchar *delete_client_sql = "DELETE FROM clients WHERE license = $1 RETURNING *;";
 
 static PGconn *connection;
 
@@ -46,20 +47,6 @@ void pg_error_exit() {
   if(connection != NULL) {
     PQfinish (connection);
   }
-}
-
-static void terminate(int code)
-{
-  if(code != 0)
-    g_printerr("%s\n", PQerrorMessage(connection));
-
-  if(res != NULL)
-    PQclear(res);
-
-  if(connection != NULL)
-    PQfinish(connection);
-
-  exit(code);
 }
 
 static gboolean  to_bool(gchar *str) {
@@ -284,4 +271,48 @@ gssize add_client_impl(const Client_t *client)
   }
 
   return 0;
+}
+
+gssize drop_client_impl(const gchar *license)
+{
+  PGconn *conn = pgGetConnection();
+
+  res = PQexecParams(conn, delete_client_sql,
+                     1, NULL, &license, NULL, NULL, 0);
+
+  gsize affected = PQntuples(res);
+
+  if (PQresultStatus(res) != PGRES_TUPLES_OK) {
+      pg_error_exit();
+      return -1;
+    }
+  else {
+      pg_normal_exit();
+
+      if (affected > 0) {
+          return 0;
+        }
+
+      errno = ENOENT;
+      perror("");
+      return 1;
+    }
+}
+
+gssize drop_clients_impl()
+{
+  PGconn *conn = pgGetConnection();
+
+  res = PQexec(conn, delete_clients_sql);
+
+  if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+      pg_error_exit();
+
+      return -1;
+    }
+  else {
+      pg_normal_exit();
+
+      return 0;
+    }
 }

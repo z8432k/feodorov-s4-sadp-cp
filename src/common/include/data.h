@@ -25,24 +25,10 @@ gssize data_drop_car(const gchar *number);
 gssize data_drop_cars();
 gssize data_service_car(const gchar *number, const gboolean flag);
 gssize data_add_client(const Client_t *client);
+gssize data_drop_client(const gchar *license);
+gssize data_drop_clients();
 
 
 
-
-
-
-void data_truncate_clients();
-void data_truncate_cars();
-
-void data_drop_client(GString *license);
-
-Client_t* data_search_client_by_license(Data_t *data, GString *license);
-Client_t* data_search_client_by_request(Data_t *data, GString *request);
-
-Car_t* data_search_car_by_number(Data_t *data, GString *number);
-Car_t* data_search_car_by_request(Data_t *data, GString *request);
-
-void data_car_to_service(Car_t *car, gboolean flag);
-void data_rent_car(Car_t *car, Client_t *client, gboolean flag);
 
 #endif //_DATA_H_
