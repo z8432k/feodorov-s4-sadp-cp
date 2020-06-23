@@ -52,7 +52,7 @@ void skiplist_destroy(SList *list)
   g_free(list);
 }
 
-SListItem* skiplist_add(SList *list, double *data)
+SListItem* skiplist_add(SList *list, gpointer data)
 {
   SListItem *update[SLIST_LEVELS];
   SListItem *current = list->head;
@@ -105,3 +105,57 @@ void skiplist_foreach(SList *list, GFunc cb, gpointer data) {
     current = current->forward[0];
   }
 }
+
+SListItem* skiplist_find(SList *list, gconstpointer data)
+{
+  SListItem *target = list->head;
+
+  for (gssize i = list->level; i >= 0; i--) {
+    while (target->forward[i] != NIL && list->comparator(target->forward[i]->data, data) < 0)  {
+      target = target->forward[i];
+    }
+  }
+
+  target = target->forward[0];
+
+  if (target != NIL && !list->comparator(target->data, data)) {
+    return target;
+  }
+
+  return NULL;
+}
+
+gshort skiplist_remove(SList *list, gconstpointer data) {
+  SListItem *update[SLIST_LEVELS];
+  SListItem *target = list->head;
+
+  for (gssize i = list->level; i >= 0; i--) {
+    while (target->forward[i] != NIL && list->comparator(target->forward[i]->data, data) < 0)
+      target = target->forward[i];
+    update[i] = target;
+  }
+
+  target = target->forward[0];
+
+  if (target == NIL || list->comparator(target->data, data) != 0) {
+    return 0;
+  }
+
+  for (gsize i = 0; i <= list->level; i++) {
+    if (update[i]->forward[i] != target) {
+      break;
+    }
+
+    update[i]->forward[i] = target->forward[i];
+  }
+
+  skiplis_free_item(target);
+
+  /* adjust header level */
+  while ((list->level > 0) && (list->head->forward[list->level] == NIL)) {
+    list->level--;
+  }
+
+  return 1;
+}
+
