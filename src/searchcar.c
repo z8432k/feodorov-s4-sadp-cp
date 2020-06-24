@@ -50,6 +50,11 @@ int main(int argc, char *argv[])
 
       RentRow_t *search_row = new_rent_row();
 
+      if (!car) {
+        g_printerr("Not found.");
+        exit(1);
+      }
+
       g_string_printf(search_row->number, "%s", car->number->str);
 
       SListItem *row = skiplist_find(data->rents, search_row);
