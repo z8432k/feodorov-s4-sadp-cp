@@ -147,7 +147,7 @@ RawData_t* load_data_impl()
         PQgetvalue(res, i, 2),
         PQgetvalue(res, i, 3),
         atoi(PQgetvalue(res, i, 4)),
-        to_bool(PQgetvalue(res, i, 4))
+        to_bool(PQgetvalue(res, i, 5))
       );
 
       g_array_append_val(data->cars, car);

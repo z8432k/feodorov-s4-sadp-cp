@@ -46,7 +46,7 @@ json_t* json_build_car(Car_t *data)
   field = json_integer(data->year);
   json_object_set_new(obj, CAR_YEAR, field);
 
-  field = json_integer(data->exists);
+  field = json_boolean(data->exists);
   json_object_set_new(obj, CAR_EXISTS, field);
 
   return obj;
