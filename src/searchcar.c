@@ -3,7 +3,8 @@
 #include <locale.h>
 #include <glib.h>
 
-#include "storage/include/json_store.h"
+#include "data.h"
+#include "stringify_json.h"
 
 #define GETTEXT_PACKAGE "gtk20"
 
@@ -58,7 +59,9 @@ int main(int argc, char *argv[])
 
       Client_t *client = avltree_lookup(data->clients, license->str);
 
-      g_print("%s", client->name->str);
+      gchar *result = cars_search_stringify_json(car, client);
+
+      g_print("%s", result);
     }
     else if (request) {
       g_printerr("Not implemented.\n");

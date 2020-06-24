@@ -29,5 +29,23 @@ gchar* cars_stringify_json(RawData_t *data)
 
 gchar* cars_search_stringify_json(Car_t *car, Client_t *client)
 {
+  gchar *str;
+  json_t *obj, *field;
 
+  obj = json_object();
+
+  if (car) {
+    field = json_build_car(car);
+    json_object_set_new(obj, "car", field);
+  }
+
+  if (client) {
+    field = json_build_client(client);
+    json_object_set_new(obj, "client", field);
+  }
+
+  str = json_dumps(obj, JSON_INDENT(2));
+
+  json_decref(obj);
+  return str;
 }
