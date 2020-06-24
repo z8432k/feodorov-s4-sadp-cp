@@ -11,6 +11,7 @@ static gchar *insert_car_sql = "INSERT INTO cars (car_number, model, color, year
 static gchar *delete_cars_sql = "DELETE from cars WHERE 1 = 1;";
 static gchar *delete_car_sql = "DELETE FROM cars WHERE car_number = $1 RETURNING *;";
 static gchar *service_car_sql = "UPDATE cars SET exi = $2 WHERE car_number = $1;";
+static gchar *search_car_sql = "SELECT * FROM cars WHERE color LIKE '%$1%' OR model LIKE '%$2%'";
 
 // CLIENTS
 static gchar *insert_client_sql = "INSERT INTO clients (client_name, license, passport, address) VALUES ($1, $2, $3, $4);";
@@ -390,4 +391,46 @@ gssize return_car_impl(const gchar *license, const gchar *number)
     }
 
   return 0;
+}
+
+RawData_t *search_car_fragment_impl(const gchar *request)
+{
+  PGconn *conn = pgGetConnection();
+  RawData_t *data = new_data();
+
+  const gchar *params[] = {
+      request,
+      request
+  };
+
+  // load cars
+  res = PQexecParams(conn, search_car_sql, 2, NULL, params, NULL, NULL, 0);
+
+  if (PQresultStatus(res) != PGRES_TUPLES_OK) {
+    gsize rows = PQntuples(res);
+
+    Car_t *car;
+    for (gsize i = 0; i < rows; i++) {
+        car = new_car();
+
+        fill_car(car,
+                 PQgetvalue(res, i, 1),
+                 PQgetvalue(res, i, 2),
+                 PQgetvalue(res, i, 3),
+                 atoi(PQgetvalue(res, i, 4)),
+                 to_bool(PQgetvalue(res, i, 4))
+        );
+
+        g_array_append_val(data->cars, car);
+      }
+
+      pg_normal_exit();
+
+      return data;
+  }
+  else {
+    pg_error_exit();
+  }
+
+  return NULL;
 }

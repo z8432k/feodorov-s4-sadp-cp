@@ -40,6 +40,7 @@ gssize data_return_car(const gchar *license, const gchar *number);
 Data_t* structured_data();
 void free_structured_data(Data_t *data);
 
+RawData_t* data_search_car_fragment(const gchar *request);
 
 
 #endif //_DATA_H_

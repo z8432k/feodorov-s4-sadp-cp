@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <locale.h>
 #include <glib.h>
+#include "string.h"
 
 #include "data.h"
 #include "stringify_json.h"
@@ -23,6 +24,15 @@ static GOptionEntry entries[] =
 
                 { NULL }
         };
+
+const wchar_t *GetWC(const char *c)
+{
+  const size_t cSize = strlen(c)+1;
+  wchar_t *wc = malloc(sizeof(wchar_t) * cSize);
+  mbstowcs (wc, c, cSize);
+
+  return wc;
+}
 
 int main(int argc, char *argv[])
 {
@@ -69,7 +79,7 @@ int main(int argc, char *argv[])
       g_print("%s", result);
     }
     else if (request) {
-      g_printerr("Not implemented.\n");
+      RawData_t* result = data_search_car_fragment(request);
     }
     else {
       g_printerr("Вы должны задать хотябы один поисковый запрос.\n");

@@ -138,3 +138,8 @@ Data_t* structured_data()
 
   return data;
 }
+
+RawData_t* data_search_car_fragment(const gchar *request)
+{
+  return search_car_fragment_impl(request);
+}

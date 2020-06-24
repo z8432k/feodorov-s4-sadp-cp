@@ -12,3 +12,4 @@ gssize drop_client_impl(const gchar *license);
 gssize drop_clients_impl();
 gssize rent_car_impl(const gchar *license, const gchar *number);
 gssize return_car_impl(const gchar *license, const gchar *number);
+RawData_t *search_car_fragment_impl(const gchar *request);
