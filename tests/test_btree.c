@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "btree2.h"
+#include "avltree.h"
 
 static gint src[] = {1, 5, 16, 2, 99, 68, 36, 86, 79, 52, 14, 9, 7, 0};
 
@@ -18,12 +18,12 @@ static gboolean print_node(gint key, gchar value, gpointer user_data)
 
 int main(void)
 {
-  struct avltree *tree = NULL;
+  AVLTree *tree = avltree_new(comparator);
 
   for (gsize i = 0; src[i] != 0; i++) {
-    tree = avltree_add(tree, src[i], "aaaa");
+    avltree_add(tree, src[i], "aaaa");
   }
 
-  btree2_traverse_in_order(tree, print_node, NULL);
+  avltree_foreach_pre(tree, print_node, NULL);
 }
 

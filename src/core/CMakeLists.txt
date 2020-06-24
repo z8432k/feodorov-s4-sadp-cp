@@ -9,10 +9,10 @@ target_include_directories(btree
         ${CMAKE_CURRENT_LIST_DIR}/include
         ${GLIB2_INCLUDE_DIRS})
 
-add_library(btree2
+add_library(avltree
         OBJECT
-        btree2.c)
-target_include_directories(btree2
+        avltree.c)
+target_include_directories(avltree
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
         ${GLIB2_INCLUDE_DIRS})
@@ -67,7 +67,7 @@ add_library(core
         $<TARGET_OBJECTS:layerlist>
         $<TARGET_OBJECTS:skiplist>
         $<TARGET_OBJECTS:wordsearch>
-        $<TARGET_OBJECTS:btree2>)
+        $<TARGET_OBJECTS:avltree>)
 target_link_libraries(core
         INTERFACE
         ${GLIB2_LDFLAGS})
