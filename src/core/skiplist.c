@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "skiplist.h"
+#include "../common/include/rentrow.h"
 
 static inline gsize skiplist_new_level()
 {

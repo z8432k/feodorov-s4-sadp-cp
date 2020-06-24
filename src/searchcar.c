@@ -7,20 +7,16 @@
 
 #define GETTEXT_PACKAGE "gtk20"
 
-typedef struct {
-    gchar *request;
-    gchar *number;
-} InputData_t;
-
-static InputData_t inputData;
+gchar *request;
+gchar *number;
 
 static GOptionEntry entries[] =
         {
-                { "request", 'r', 0, G_OPTION_ARG_STRING, &inputData.request,
+                { "request", 'r', 0, G_OPTION_ARG_STRING, &request,
                         "Поисковый запрос по цвету автомобиля",
                         "голубой" },
 
-                { "number", 'n', 0, G_OPTION_ARG_STRING, &inputData.number,
+                { "number", 'n', 0, G_OPTION_ARG_STRING, &number,
                         "Поисковый запрос по гос. номеру",
                         "ANNNAA-NN" },
 
@@ -44,6 +40,32 @@ int main(int argc, char *argv[])
         exit (1);
     }
 
-    printf("Not implemented.\n");
+    Data_t *data= structured_data();
+
+
+    GString *key = g_string_new(number);
+    if (number) {
+      Car_t *car = (Car_t *) hash_tab_get(data->cars, key);
+
+      RentRow_t *search_row = new_rent_row();
+
+      g_string_printf(search_row->number, "%s", car->number->str);
+
+      SListItem *row = skiplist_find(data->rents, search_row);
+
+      // g_print("%s", ((RentRow_t *) row->data)->license->str);
+      GString *license = ((RentRow_t *) row->data)->license;
+
+      Client_t *client = btree_lookup(data->clients, license->str);
+
+      g_print("%s", client->name->str);
+    }
+    else if (request) {
+      g_printerr("Not implemented.\n");
+    }
+    else {
+      g_printerr("Вы должны задать хотябы один поисковый запрос.\n");
+    }
+
 }
 

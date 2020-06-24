@@ -17,7 +17,8 @@ foreach(_target IN LISTS _targets)
   add_executable(${_target} ${_target}.c)
 
   target_link_libraries(${_target}
-          common)
+          common
+          core)
 endforeach()
 
 add_subdirectory(core)

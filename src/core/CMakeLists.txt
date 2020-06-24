@@ -9,6 +9,14 @@ target_include_directories(btree
         ${CMAKE_CURRENT_LIST_DIR}/include
         ${GLIB2_INCLUDE_DIRS})
 
+add_library(btree2
+        OBJECT
+        btree2.c)
+target_include_directories(btree2
+        PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/include
+        ${GLIB2_INCLUDE_DIRS})
+
 
 add_library(hashtab
         OBJECT
@@ -58,7 +66,8 @@ add_library(core
         $<TARGET_OBJECTS:merge_sort>
         $<TARGET_OBJECTS:layerlist>
         $<TARGET_OBJECTS:skiplist>
-        $<TARGET_OBJECTS:wordsearch>)
+        $<TARGET_OBJECTS:wordsearch>
+        $<TARGET_OBJECTS:btree2>)
 target_link_libraries(core
         INTERFACE
         ${GLIB2_LDFLAGS})

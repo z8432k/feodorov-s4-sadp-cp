@@ -5,14 +5,21 @@
 
 #include "client.h"
 #include "car.h"
+#include "rentrow.h"
+#include "btree.h"
+#include "hashtab.h"
+#include "skiplist.h"
 
 typedef struct {
-    GTree *clients;
+    BTree *clients;
+    HashTab_t *cars;
+    SList *rents;
 } Data_t;
 
 typedef struct {
     GArray *clients;  // GArray<Client_t>[]
     GArray *cars;     // GArray<Car_t>[]
+    GArray *rents;    // GArray<RentRow_t>[]
 } RawData_t;
 
 typedef void* (* dataSearchFunc_t)(Data_t *data, GString *license);
@@ -30,7 +37,8 @@ gssize data_drop_clients();
 gssize data_rent_car(const gchar *license, const gchar *number);
 gssize data_return_car(const gchar *license, const gchar *number);
 
-
+Data_t* structured_data();
+void free_structured_data(Data_t *data);
 
 
 

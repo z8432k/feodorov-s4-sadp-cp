@@ -1,5 +1,5 @@
-#ifndef _BTREE_H_
-#define _BTREE_H_
+//#ifndef _BTREE_H_
+//#define _BTREE_H_
 
 #include <glib.h>
 
@@ -24,4 +24,4 @@ void btree_foreach(BTree *tree, GTraverseFunc func, gpointer user_data);
 void btree_foreach_pre(BTree *tree, GTraverseFunc func, gpointer user_data);
 
 
-#endif //_BTREE_H_
+//#endif //_BTREE_H_

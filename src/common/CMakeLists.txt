@@ -9,6 +9,7 @@ add_library(data
 target_include_directories(data
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
+        ${CMAKE_CURRENT_LIST_DIR}/../core/include
         ${CMAKE_CURRENT_LIST_DIR}/storage/include
         ${GLIB2_INCLUDE_DIRS})
 
@@ -17,6 +18,7 @@ add_library(json_store
         storage/json_store.c)
 target_include_directories(json_store
         PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/../core/include
         ${CMAKE_CURRENT_LIST_DIR}/storage/include
         ${GLIB2_INCLUDE_DIRS}
         ${JANSSON_INCLUDE_DIRS})
@@ -27,6 +29,7 @@ add_library(pgsql_store
 target_include_directories(pgsql_store
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
+        ${CMAKE_CURRENT_LIST_DIR}/../core/include
         ${CMAKE_CURRENT_LIST_DIR}/storage/include
         ${GLIB2_INCLUDE_DIRS}
         ${PGSQL_INCLUDE_DIRS})
@@ -62,6 +65,7 @@ add_library(stringify_json
 target_include_directories(stringify_json
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
+        ${CMAKE_CURRENT_LIST_DIR}/../core/include
         ${CMAKE_CURRENT_LIST_DIR}/storage/include
         ${GLIB2_INCLUDE_DIRS}
         ${JANSSON_INCLUDE_DIRS})

@@ -45,7 +45,7 @@ static void new_list(SList **list, gconstpointer ignored) {
   *list = skiplist_new_full(comparator, NULL);
 
   for (gsize i = 0; !isnan(src[i]); i++) {
-    skiplist_add(*list, &src[i]);
+      skiplist_add (*list, &src[i]);
   }
 }
 
@@ -56,7 +56,7 @@ static void free_list(SList **list, gconstpointer ignored) {
 static void create_test(SList **list, gconstpointer data)
 {
   for (gsize i = 0; !isnan(src[i]); i++) {
-    skiplist_add(*list, &src[i]);
+      skiplist_add (*list, &src[i]);
   }
 }
 

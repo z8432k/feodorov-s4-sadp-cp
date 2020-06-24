@@ -19,6 +19,7 @@ static gchar *delete_clients_sql = "DELETE from clients WHERE 1 = 1;";
 static gchar *delete_client_sql = "DELETE FROM clients WHERE license = $1 RETURNING *;";
 
 // RENT
+static gchar *select_rents_sql = "SELECT * FROM rents;";
 static gchar *insert_rent_sql = "INSERT INTO rents (client_license, car_number, rent_date) VALUES ($1, $2, now())";
 static gchar *update_rent_sql = "UPDATE rents SET return_date = now() WHERE client_license = $1 AND car_number = $2;";
 
@@ -174,12 +175,36 @@ RawData_t* load_data_impl()
 
       g_array_append_val(data->clients, client);
     }
-
-    pg_normal_exit();
   }
   else {
     pg_error_exit();
   }
+
+  // load rents
+  res = PQexec(conn, select_rents_sql);
+
+  if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+      gsize rows = PQntuples(res);
+
+      RentRow_t *row;
+      for (gsize i = 0; i < rows; i++) {
+          row = new_rent_row();
+
+          fill_rent_row(row,
+              PQgetvalue(res, i, 1),
+              PQgetvalue(res, i, 2),
+              PQgetvalue(res, i, 3),
+              PQgetvalue(res, i, 4)
+          );
+
+          g_array_append_val(data->rents, row);
+        }
+
+      pg_normal_exit();
+    }
+  else {
+      pg_error_exit();
+    }
 
   return data;
 }

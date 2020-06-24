@@ -46,17 +46,17 @@ static gboolean btree_free_node(BTreeNode *node, gpointer user_data)
   return FALSE;
 }
 
-static inline gsize btree_height(BTreeNode * node)
+static gsize btree_height(BTreeNode *node)
 {
   return node ? node->height : 0;
 }
 
-static inline gshort btree_bfactor(BTreeNode *node)
+static gshort btree_bfactor(BTreeNode *node)
 {
   return btree_height(node->right)-btree_height(node->left);
 }
 
-static inline void btree_fixheight(BTreeNode *node)
+static void btree_fixheight(BTreeNode *node)
 {
   gsize hl = btree_height(node->left);
   gsize hr = btree_height(node->right);
@@ -64,7 +64,7 @@ static inline void btree_fixheight(BTreeNode *node)
   node->height = (hl > hr ? hl : hr) + 1;
 }
 
-static inline BTreeNode* btree_findmin(BTreeNode *node)
+static BTreeNode* btree_findmin(BTreeNode *node)
 {
   return node->left ? btree_findmin(node->left) : node;
 }
@@ -204,15 +204,15 @@ static gboolean btree_internal_lookup_node(BTreeNode *node, gpointer user_data)
   return FALSE;
 }
 
-static BTreeNode* btree_remove_deep(BTreeNode *current_node, gconstpointer key)
+static BTreeNode* _btree_remove_deep(BTreeNode *current_node, gconstpointer key)
 {
   gint comp_result = current_node->tree->comparator(key, current_node->key, NULL);
 
   if (comp_result < 0) {
-    current_node->left = btree_remove_deep(current_node->left, key);
+    //current_node->left = btree_remove_deep(current_node->left, key);
   }
   else if (comp_result > 0) {
-    current_node->right = btree_remove_deep(current_node->right, key);
+    //current_node->right = btree_remove_deep(current_node->right, key);
   }
   else { // bingo!
     BTreeNode *left = current_node->left;
@@ -292,13 +292,48 @@ gpointer btree_lookup(BTree *tree, gconstpointer key)
   return NULL;
 }
 
+static BTreeNode* btree_remove_deep_(BTreeNode *node, gconstpointer key)
+{
+  if (!node)
+    {
+      return 0;
+    }
+
+  gint comp_result = node->tree->comparator (key, node->key, NULL);
+
+  if (comp_result < 0)
+    {
+      node->left = btree_remove_deep_ (node->left, key);
+    }
+  else if (comp_result > 0)
+    {
+      node->right = btree_remove_deep_ (node->right, key);
+    }
+  else
+    {
+      BTreeNode *q = node->left;
+      BTreeNode *r = node->right;
+
+      btree_free_node (node, NULL);
+
+      if (!r)
+        {
+          return q;
+        }
+
+      BTreeNode *min = btree_findmin (r);
+      min->right = btree_removemin (r);
+      min->left = q;
+
+      return btree_balance (min);
+    }
+
+  return btree_balance(node);
+}
+
 gboolean btree_remove(BTree *tree, gconstpointer key)
 {
-  if (tree->root) {
-    return FALSE;
-  }
+  btree_remove_deep_(tree->root, key);
 
-  btree_remove_deep(tree->root, key);
-
-  return FALSE;
+  return 0;
 }
