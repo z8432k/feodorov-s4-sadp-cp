@@ -7,6 +7,7 @@
 #include "data.h"
 #include "stringify_json.h"
 #include "wordsearch.h"
+#include "skiplist.h"
 
 #define GETTEXT_PACKAGE "gtk20"
 
@@ -64,6 +65,21 @@ gint lookup_clients(gpointer k, gpointer v, gpointer data)
  return 1;
 }
 
+typedef struct {
+    GArray *cars;
+    gchar *license;
+} SearchContext;
+
+void search_cars(gpointer data, gpointer user_data)
+{
+  RentRow_t *row = data;
+  SearchContext *context = user_data;
+
+  if (g_strcmp0(row->license->str, context->license) == 0) {
+    g_array_append_val(context->cars, data);
+  }
+}
+
 int main(int argc, char *argv[])
 {
     setlocale(LC_ALL, "");
@@ -83,32 +99,34 @@ int main(int argc, char *argv[])
 
   Data_t *data= structured_data();
 
+    RawData_t *raw = new_data();
 
   GString *lic = g_string_new(license);
 
   if (license) {
-    if (license) {
-      g_printerr("Not implemented.");
+    Client_t *client = avltree_lookup(data->clients, lic->str);
+
+    if (!client) {
+      g_printerr("Not found.\n");
       exit(1);
     }
 
-    Client_t *client = avltree_lookup(data->clients, lic->str);
+    g_array_append_val(raw->clients, client);
 
+    SearchContext ctxt = {
+        raw->cars,
+        license
+    };
 
-    RentRow_t *search_row = new_rent_row();
+    skiplist_foreach(data->rents, search_cars, &ctxt);
 
-    //g_string_printf(search_row->number, "%s", car->number->str);
+      gchar* clients = clients_stringify_json(raw);
+      gchar* cars = cars_stringify_json(raw);
 
-    SListItem *row = skiplist_find(data->rents, search_row);
-
-    // g_print("%s", ((RentRow_t *) row->data)->license->str);
-    GString *license = ((RentRow_t *) row->data)->license;
-
-
-    //gchar *result = cars_search_stringify_json(car, client);
-
-    //g_print("%s", result);
+      g_print("%s", clients);
+      g_print("%s", cars);
   }
+
   else if (request) {
     AVLTree *clients = data->clients;
 
