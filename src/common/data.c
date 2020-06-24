@@ -72,3 +72,13 @@ gssize data_drop_clients()
 {
   return drop_clients_impl();
 }
+
+gssize data_rent_car(const gchar *license, const gchar *number)
+{
+  return rent_car_impl(license, number);
+}
+
+gssize data_return_car(const gchar *license, const gchar *number)
+{
+  return return_car_impl(license, number);
+}

@@ -10,3 +10,5 @@ gssize service_car_impl(const gchar *number, const gboolean flag);
 gssize add_client_impl(const Client_t *client);
 gssize drop_client_impl(const gchar *license);
 gssize drop_clients_impl();
+gssize rent_car_impl(const gchar *license, const gchar *number);
+gssize return_car_impl(const gchar *license, const gchar *number);

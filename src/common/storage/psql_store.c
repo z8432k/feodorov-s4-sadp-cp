@@ -18,6 +18,10 @@ static gchar *select_clients_sql = "SELECT * from clients;";
 static gchar *delete_clients_sql = "DELETE from clients WHERE 1 = 1;";
 static gchar *delete_client_sql = "DELETE FROM clients WHERE license = $1 RETURNING *;";
 
+// RENT
+static gchar *insert_rent_sql = "INSERT INTO rents (client_license, car_number, rent_date) VALUES ($1, $2, now())";
+static gchar *update_rent_sql = "UPDATE rents SET return_date = now() WHERE client_license = $1 AND car_number = $2;";
+
 static PGconn *connection;
 
 static PGresult *res;
@@ -315,4 +319,50 @@ gssize drop_clients_impl()
 
       return 0;
     }
+}
+
+gssize rent_car_impl(const gchar *license, const gchar *number)
+{
+  const gchar *params[2] = {
+    license,
+    number
+  };
+
+  PGconn *conn = pgGetConnection();
+
+  res = PQexecParams(conn, insert_rent_sql, 2, NULL, params, NULL, NULL, 0);
+
+  if (PQresultStatus(res) == PGRES_COMMAND_OK) {
+    pg_normal_exit();
+  }
+  else {
+    pg_error_exit();
+
+    return -1;
+  }
+
+  return 0;
+}
+
+gssize return_car_impl(const gchar *license, const gchar *number)
+{
+  const gchar *params[2] = {
+      license,
+      number
+  };
+
+  PGconn *conn = pgGetConnection();
+
+  res = PQexecParams(conn, update_rent_sql, 2, NULL, params, NULL, NULL, 0);
+
+  if (PQresultStatus(res) == PGRES_COMMAND_OK) {
+      pg_normal_exit();
+    }
+  else {
+      pg_error_exit();
+
+      return -1;
+    }
+
+  return 0;
 }

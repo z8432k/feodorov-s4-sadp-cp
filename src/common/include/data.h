@@ -27,6 +27,9 @@ gssize data_service_car(const gchar *number, const gboolean flag);
 gssize data_add_client(const Client_t *client);
 gssize data_drop_client(const gchar *license);
 gssize data_drop_clients();
+gssize data_rent_car(const gchar *license, const gchar *number);
+gssize data_return_car(const gchar *license, const gchar *number);
+
 
 
 
