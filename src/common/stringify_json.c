@@ -49,3 +49,26 @@ gchar* cars_search_stringify_json(Car_t *car, Client_t *client)
   json_decref(obj);
   return str;
 }
+
+void _each_clients(gpointer ptr, gpointer target)
+{
+  Client_t *client = ptr;
+  json_t *arr = target;
+
+  json_array_append(arr, json_build_client(client));
+}
+
+gchar* clients_search_stringify_json(GPtrArray *clients)
+{
+  gchar *str;
+  json_t *arr;
+
+  arr = json_array();
+
+  g_ptr_array_foreach(clients, _each_clients, arr);
+
+  str = json_dumps(arr, JSON_INDENT(2));
+
+  json_decref(arr);
+  return str;
+}

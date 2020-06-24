@@ -108,7 +108,7 @@ Data_t* structured_data()
 
   AVLTree *tree = avltree_new(avltree_comparator);
 
-  for (gsize i = 0; i < raw->rents->len; i++) {
+  for (gsize i = 0; i < raw->clients->len; i++) {
     Client_t *client = g_array_index(raw->clients, Client_t *, i);
     avltree_add(tree, client->license->str, client);
   }
