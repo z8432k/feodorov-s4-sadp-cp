@@ -88,7 +88,7 @@ gssize data_return_car(const gchar *license, const gchar *number)
   return return_car_impl(license, number);
 }
 
-static gint btree_comparator(gconstpointer a, gconstpointer b, gpointer  data) {
+static gint avltree_comparator(gconstpointer a, gconstpointer b, gpointer  data) {
   const gchar *one = a, *two = b;
 
   return strcmp(one, two);
@@ -106,11 +106,11 @@ Data_t* structured_data()
   Data_t *data = g_new0(Data_t, 1);
   RawData_t *raw = data_load();
 
-  BTree *tree = btree_new(btree_comparator);
+  AVLTree *tree = avltree_new(avltree_comparator);
 
   for (gsize i = 0; i < raw->rents->len; i++) {
     Client_t *client = g_array_index(raw->clients, Client_t *, i);
-    btree_insert(tree, client->license, client);
+    avltree_add(tree, client->license->str, client);
   }
 
   data->clients = tree;

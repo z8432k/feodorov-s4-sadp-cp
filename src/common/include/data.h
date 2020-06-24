@@ -6,12 +6,12 @@
 #include "client.h"
 #include "car.h"
 #include "rentrow.h"
-#include "btree.h"
+#include "avltree.h"
 #include "hashtab.h"
 #include "skiplist.h"
 
 typedef struct {
-    BTree *clients;
+    AVLTree *clients;
     HashTab_t *cars;
     SList *rents;
 } Data_t;

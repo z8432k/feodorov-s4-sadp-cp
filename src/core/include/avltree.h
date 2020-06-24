@@ -23,6 +23,6 @@ struct __avltree_node {
 
 AVLTree* avltree_new_full(GCompareDataFunc comparator, GDestroyNotify key_destroy_func, GDestroyNotify value_destroy_func);
 void avltree_add(AVLTree *tree, gpointer key, gpointer value);
-gpointer avltree_lookup(AVLTree *tree, gpointer key);
+gpointer avltree_lookup(AVLTree *tree, gchar *key);
 void avltree_foreach(AVLTree *tree, GTraverseFunc func, gpointer user_data);
 void avltree_foreach_pre(AVLTree *tree, GTraverseFunc func, gpointer user_data);

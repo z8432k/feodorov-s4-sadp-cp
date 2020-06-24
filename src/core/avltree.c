@@ -6,6 +6,11 @@ typedef gboolean (*BTreeInternalTraverseFunc) (
     AVLTreeNode *node,
     gpointer data);
 
+typedef struct {
+    AVLTreeNode *node;
+    gchar *key;
+} InternalLookupContext;
+
 static int imax2(int a, int b)
 {
   if (a > b) {
@@ -52,6 +57,21 @@ static void avltree_traverse_in_order(AVLTreeNode *current_node, GTraverseFunc f
 
   if (current_node->right != NULL) {
       avltree_traverse_in_order(current_node->right, func, user_data);
+    }
+}
+
+static void avltree_internal_traverse_in_order(AVLTreeNode *current_node, BTreeInternalTraverseFunc func, gpointer user_data)
+{
+  if (current_node->left != NULL) {
+      avltree_internal_traverse_in_order(current_node->left, func, user_data);
+    }
+
+  if (func(current_node, user_data)) {
+      return;
+    }
+
+  if (current_node->right != NULL) {
+      avltree_internal_traverse_in_order(current_node->right, func, user_data);
     }
 }
 
@@ -213,3 +233,33 @@ void avltree_add(AVLTree *tree, gpointer key, gpointer value)
   tree->root = avltree_add_deep(tree->root, new_node);
 }
 
+static gboolean avltree_internal_lookup_node(AVLTreeNode *node, gpointer user_data)
+{
+  InternalLookupContext *context = user_data;
+
+  gint comp_result = node->tree->comparator(context->key, node->key, NULL);
+
+  if (!comp_result) {
+      context->node = node;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gpointer avltree_lookup(AVLTree *tree, gchar *key)
+{
+  InternalLookupContext context = {
+      NULL,
+      key
+  };
+
+  avltree_internal_traverse_in_order(tree->root, avltree_internal_lookup_node, &context);
+
+  if (context.node) {
+    return context.node->value;
+  }
+
+  return NULL;
+}

@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
       // g_print("%s", ((RentRow_t *) row->data)->license->str);
       GString *license = ((RentRow_t *) row->data)->license;
 
-      Client_t *client = btree_lookup(data->clients, license->str);
+      Client_t *client = avltree_lookup(data->clients, license->str);
 
       g_print("%s", client->name->str);
     }
