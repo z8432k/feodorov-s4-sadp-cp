@@ -58,6 +58,9 @@ gint lookup_clients(gpointer k, gpointer v, gpointer data)
     g_ptr_array_add(context->box, client);
   }
 
+  free((void *) name);
+  free((void *) addr);
+
  return 1;
 }
 
