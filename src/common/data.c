@@ -1,5 +1,4 @@
 #include "data.h"
-#include <wchar.h>
 #include <string.h>
 
 #include <psql_store.h>
@@ -135,7 +134,6 @@ Data_t* structured_data()
   }
 
   data->rents = list;
-
   return data;
 }
 

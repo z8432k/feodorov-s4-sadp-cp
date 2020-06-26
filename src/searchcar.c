@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include <locale.h>
 #include <glib.h>
 #include "string.h"
@@ -51,7 +50,7 @@ int main(int argc, char *argv[])
         exit (1);
     }
 
-    Data_t *data= structured_data();
+    Data_t *data = structured_data();
 
 
     GString *key = g_string_new(number);
@@ -70,9 +69,13 @@ int main(int argc, char *argv[])
       SListItem *row = skiplist_find(data->rents, search_row);
 
       // g_print("%s", ((RentRow_t *) row->data)->license->str);
-      GString *license = ((RentRow_t *) row->data)->license;
 
-      Client_t *client = avltree_lookup(data->clients, license->str);
+        Client_t *client = NULL;
+        if (row) {
+          GString *license = ((RentRow_t *) row->data)->license;
+            client = avltree_lookup(data->clients, license->str);
+        }
+
 
       gchar *result = cars_search_stringify_json(car, client);
 
@@ -80,6 +83,7 @@ int main(int argc, char *argv[])
     }
     else if (request) {
       RawData_t* result = data_search_car_fragment(request);
+      g_print("OK");
     }
     else {
       g_printerr("Вы должны задать хотябы один поисковый запрос.\n");

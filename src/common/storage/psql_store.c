@@ -8,15 +8,15 @@
 static gchar *select_cars_sql = "SELECT * FROM cars;";
 static gchar *select_car_sql = "SELECT * FROM cars WHERE car_number = $1;";
 static gchar *insert_car_sql = "INSERT INTO cars (car_number, model, color, year) VALUES ($1, $2, $3, $4);";
-static gchar *delete_cars_sql = "DELETE from cars WHERE 1 = 1;";
+static gchar *delete_cars_sql = "DELETE FROM cars WHERE 1 = 1;";
 static gchar *delete_car_sql = "DELETE FROM cars WHERE car_number = $1 RETURNING *;";
 static gchar *service_car_sql = "UPDATE cars SET exi = $2 WHERE car_number = $1;";
-static gchar *search_car_sql = "SELECT * FROM cars WHERE color LIKE '%$1%' OR model LIKE '%$2%'";
+static gchar *search_car_sql = "SELECT * FROM cars WHERE color LIKE '%$1%' OR model LIKE '%$1%';";
 
 // CLIENTS
 static gchar *insert_client_sql = "INSERT INTO clients (client_name, license, passport, address) VALUES ($1, $2, $3, $4);";
-static gchar *select_clients_sql = "SELECT * from clients;";
-static gchar *delete_clients_sql = "DELETE from clients WHERE 1 = 1;";
+static gchar *select_clients_sql = "SELECT * FROM clients;";
+static gchar *delete_clients_sql = "DELETE FROM clients WHERE 1 = 1;";
 static gchar *delete_client_sql = "DELETE FROM clients WHERE license = $1 RETURNING *;";
 
 // RENT
@@ -201,7 +201,7 @@ RawData_t* load_data_impl()
           g_array_append_val(data->rents, row);
         }
 
-      pg_normal_exit();
+      PQclear(res);
     }
   else {
       pg_error_exit();
@@ -313,20 +313,20 @@ gssize drop_client_impl(const gchar *license)
   gsize affected = PQntuples(res);
 
   if (PQresultStatus(res) != PGRES_TUPLES_OK) {
-      pg_error_exit();
-      return -1;
-    }
+    pg_error_exit();
+    return -1;
+  }
   else {
-      pg_normal_exit();
+    pg_normal_exit();
 
-      if (affected > 0) {
-          return 0;
-        }
+    if (affected > 0) {
+        return 0;
+      }
 
-      errno = ENOENT;
-      perror("");
-      return 1;
-    }
+    errno = ENOENT;
+    perror("");
+    return 1;
+  }
 }
 
 gssize drop_clients_impl()
@@ -393,20 +393,16 @@ gssize return_car_impl(const gchar *license, const gchar *number)
   return 0;
 }
 
-RawData_t *search_car_fragment_impl(const gchar *request)
+RawData_t* search_car_fragment_impl(const gchar *request)
 {
   PGconn *conn = pgGetConnection();
   RawData_t *data = new_data();
 
-  const gchar *params[] = {
-      request,
-      request
-  };
-
   // load cars
-  res = PQexecParams(conn, search_car_sql, 2, NULL, params, NULL, NULL, 0);
+  res = PQexecParams(conn, search_car_sql,
+      1, NULL, &request, NULL, NULL, 0);
 
-  if (PQresultStatus(res) != PGRES_TUPLES_OK) {
+  if (PQresultStatus(res) == PGRES_TUPLES_OK) {
     gsize rows = PQntuples(res);
 
     Car_t *car;
