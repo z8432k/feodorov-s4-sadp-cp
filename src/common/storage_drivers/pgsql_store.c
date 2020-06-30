@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <glib.h>
-#include "psql_store.h"
+#include "pgsql_store.h"
 #include <errno.h>
-
+#include "data.h"
+#include "data_types.h"
 
 // CARS
 static gchar *select_cars_sql = "SELECT * FROM cars;";
@@ -130,7 +131,7 @@ RawData_t* load_data_impl()
 {
   PGconn *conn = pgGetConnection();
 
-  RawData_t *data = new_data();
+  RawData_t *data = data_new();
 
   // load cars
   res = PQexec(conn, select_cars_sql);
@@ -396,7 +397,7 @@ gssize return_car_impl(const gchar *license, const gchar *number)
 RawData_t* search_car_fragment_impl(const gchar *request)
 {
   PGconn *conn = pgGetConnection();
-  RawData_t *data = new_data();
+  RawData_t *data = data_new();
 
   // load cars
   res = PQexecParams(conn, search_car_sql,

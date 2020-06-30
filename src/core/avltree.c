@@ -35,14 +35,16 @@ static inline void avltree_try_free_value(AVLTreeNode *node)
   }
 }
 
-static gboolean avltree_free_node(AVLTreeNode *node, gpointer user_data)
+static gint avltree_free_node(gpointer data, gpointer not_used, gpointer not_used2)
 {
+  AVLTreeNode *node = data;
+
   avltree_try_free_key(node);
   avltree_try_free_value(node);
 
   g_free(node);
 
-  return FALSE;
+  return 0;
 }
 
 static void avltree_traverse_in_order(AVLTreeNode *current_node, GTraverseFunc func, gpointer user_data)
@@ -126,12 +128,12 @@ static int avltree_height(AVLTreeNode *node)
 {
   return (node != NULL) ? node->height : -1;
 }
-
+/*
 static int avltree_balance(AVLTreeNode *tree)
 {
   return avltree_height(tree->left) - avltree_height(tree->right);
 }
-
+*/
 static AVLTreeNode *avltree_right_rotate(AVLTreeNode *node)
 {
   AVLTreeNode *left;

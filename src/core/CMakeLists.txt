@@ -1,4 +1,5 @@
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE  ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 
 add_library(btree
@@ -60,7 +61,7 @@ target_include_directories(wordsearch
         ${GLIB2_INCLUDE_DIRS})
 
 add_library(core
-        STATIC
+        SHARED
         $<TARGET_OBJECTS:hashtab>
         $<TARGET_OBJECTS:btree>
         $<TARGET_OBJECTS:merge_sort>

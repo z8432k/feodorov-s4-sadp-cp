@@ -1,5 +1,63 @@
 #include "stringify_json.h"
-#include "json_store.h"
+
+json_t* data_array_to_json_array(GArray *array, jsonFromData builder)
+{
+  json_t *item;
+  json_t *result = json_array();
+
+  for (guint i = 0; i < array->len; i++) {
+      void *data = g_array_index(array, void *, i);
+
+      item = builder(data);
+
+      json_array_append_new(result, item);
+    }
+
+  return result;
+}
+
+json_t* json_build_client(Client_t *data)
+{
+  json_t *field;
+  json_t *obj = json_object();
+
+  field = json_string(data->name->str);
+  json_object_set_new(obj, CLIENT_NAME, field);
+
+  field = json_string(data->license->str);
+  json_object_set_new(obj, CLIENT_LICENSE, field);
+
+  field = json_string(data->passport->str);
+  json_object_set_new(obj, CLIENTS_PASSPORT, field);
+
+  field = json_string(data->address->str);
+  json_object_set_new(obj, CLIENTS_ADDRESS, field);
+
+  return obj;
+}
+
+json_t* json_build_car(Car_t *data)
+{
+  json_t *field;
+  json_t *obj = json_object();
+
+  field = json_string(data->number->str);
+  json_object_set_new(obj, CAR_NUMBER, field);
+
+  field = json_string(data->model->str);
+  json_object_set_new(obj, CAR_MODEL, field);
+
+  field = json_string(data->color->str);
+  json_object_set_new(obj, CAR_COLOR, field);
+
+  field = json_integer(data->year);
+  json_object_set_new(obj, CAR_YEAR, field);
+
+  field = json_boolean(data->exists);
+  json_object_set_new(obj, CAR_EXISTS, field);
+
+  return obj;
+}
 
 gchar* clients_stringify_json(RawData_t *data)
 {

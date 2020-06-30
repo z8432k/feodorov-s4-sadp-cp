@@ -1,7 +1,7 @@
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE  ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 pkg_check_modules(JANSSON REQUIRED jansson)
-pkg_check_modules(PGSQL REQUIRED libpq)
 
 add_library(data
         OBJECT
@@ -13,26 +13,15 @@ target_include_directories(data
         ${CMAKE_CURRENT_LIST_DIR}/storage/include
         ${GLIB2_INCLUDE_DIRS})
 
-add_library(json_store
+add_library(storage
         OBJECT
-        storage/json_store.c)
-target_include_directories(json_store
-        PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/../core/include
-        ${CMAKE_CURRENT_LIST_DIR}/storage/include
-        ${GLIB2_INCLUDE_DIRS}
-        ${JANSSON_INCLUDE_DIRS})
-
-add_library(pgsql_store
-        OBJECT
-        storage/psql_store.c)
-target_include_directories(pgsql_store
+        storage.c)
+target_include_directories(storage
         PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
         ${CMAKE_CURRENT_LIST_DIR}/../core/include
         ${CMAKE_CURRENT_LIST_DIR}/storage/include
-        ${GLIB2_INCLUDE_DIRS}
-        ${PGSQL_INCLUDE_DIRS})
+        ${GLIB2_INCLUDE_DIRS})
 
 add_library(client
         OBJECT
@@ -70,23 +59,25 @@ target_include_directories(stringify_json
         ${GLIB2_INCLUDE_DIRS}
         ${JANSSON_INCLUDE_DIRS})
 
-add_library(common
-        STATIC
+add_library(rentcar
+        SHARED
         $<TARGET_OBJECTS:data>
-        $<TARGET_OBJECTS:json_store>
-        $<TARGET_OBJECTS:pgsql_store>
+        $<TARGET_OBJECTS:storage>
         $<TARGET_OBJECTS:client>
         $<TARGET_OBJECTS:car>
         $<TARGET_OBJECTS:rentrow>
         $<TARGET_OBJECTS:stringify_json>)
-target_link_libraries(common
+target_link_libraries(rentcar
         INTERFACE
         ${GLIB2_LDFLAGS}
         ${PGSQL_LDFLAGS}
-        ${JANSSON_LDFLAGS})
-target_include_directories(common
+        ${JANSSON_LDFLAGS}
+        ${CMAKE_DL_LIBS})
+target_include_directories(rentcar
         INTERFACE
         ${CMAKE_CURRENT_LIST_DIR}/include
         ${CMAKE_CURRENT_LIST_DIR}/storage/include
         ${GLIB2_INCLUDE_DIRS}
         ${JANSSON_INCLUDE_DIRS})
+
+add_subdirectory(storage_drivers)

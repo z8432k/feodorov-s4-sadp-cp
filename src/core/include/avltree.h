@@ -16,7 +16,7 @@ struct __avltree_node {
     AVLTree *tree;
     gpointer key;
     gpointer value;
-    gsize height;
+    gssize height;
     AVLTreeNode *left;
     AVLTreeNode *right;
 };

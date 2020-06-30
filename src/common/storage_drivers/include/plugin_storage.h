@@ -1,4 +1,9 @@
-#include <postgresql/libpq-fe.h>
+//
+// Created by alexander on 28.06.2020.
+//
+
+#ifndef _PLUGIN_STORAGE_H_
+#define _PLUGIN_STORAGE_H_
 
 #include "data.h"
 
@@ -13,3 +18,5 @@ gssize drop_clients_impl();
 gssize rent_car_impl(const gchar *license, const gchar *number);
 gssize return_car_impl(const gchar *license, const gchar *number);
 RawData_t *search_car_fragment_impl(const gchar *request);
+
+#endif //_PLUGIN_STORAGE_H_
