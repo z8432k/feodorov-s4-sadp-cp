@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <glib.h>
-#include "string.h"
+#include <string.h>
 
 #include "rentcar.h"
 #include "stringify_json.h"
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 
   if (!g_option_context_parse (context, &argc, &argv, &error)) {
       g_print ("option parsing failed: %s\n", error->message);
-      exit (1);
+      exit (EXIT_FAILURE);
   }
 
   Data_t *data= structured_data();
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 
     if (!client) {
       g_printerr("Not found.\n");
-      exit(1);
+      exit(EXIT_FAILURE);
     }
 
     g_array_append_val(raw->clients, client);
@@ -134,8 +134,8 @@ int main(int argc, char *argv[])
     GPtrArray *result = g_ptr_array_new();
 
     ClientsLookupContext lookup_context = {
-        request,
-        result
+      request,
+      result
     };
 
     avltree_foreach_pre(clients, lookup_clients, &lookup_context);

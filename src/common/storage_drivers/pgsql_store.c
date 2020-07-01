@@ -430,11 +430,11 @@ RawData_t* search_car_fragment_impl(const gchar *request)
         car = new_car();
 
         fill_car(car,
-                 PQgetvalue(res, i, 1),
-                 PQgetvalue(res, i, 2),
-                 PQgetvalue(res, i, 3),
-                 atoi(PQgetvalue(res, i, 4)),
-                 to_bool(PQgetvalue(res, i, 4))
+          PQgetvalue(res, i, 1),
+          PQgetvalue(res, i, 2),
+          PQgetvalue(res, i, 3),
+          atoi(PQgetvalue(res, i, 4)),
+          to_bool(PQgetvalue(res, i, 4))
         );
 
         g_array_append_val(data->cars, car);

@@ -48,7 +48,8 @@ int main(int argc, char *argv[])
 
     if (!g_option_context_parse (context, &argc, &argv, &error)) {
         g_print ("option parsing failed: %s\n", error->message);
-        exit (1);
+
+        exit(EXIT_FAILURE);
     }
 
     Data_t *data = structured_data();
@@ -62,7 +63,8 @@ int main(int argc, char *argv[])
 
       if (!car) {
         g_printerr("Not found.");
-        exit(1);
+
+        exit(EXIT_FAILURE);
       }
 
       g_string_printf(search_row->number, "%s", car->number->str);
@@ -84,7 +86,8 @@ int main(int argc, char *argv[])
     }
     else if (request) {
       // RawData_t* result = data_search_car_fragment(request);
-      g_print("OK");
+
+      g_print("Not implemented yet.\n");
     }
     else {
       g_printerr("Вы должны задать хотябы один поисковый запрос.\n");
