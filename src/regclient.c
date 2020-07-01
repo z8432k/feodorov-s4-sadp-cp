@@ -2,7 +2,7 @@
 #include <locale.h>
 #include <glib.h>
 
-#include "storage.h"
+#include "rentcar.h"
 
 #define GETTEXT_PACKAGE "gtk20"
 
@@ -38,6 +38,8 @@ static GOptionEntry entries[] =
 int main(int argc, char *argv[])
 {
   setlocale(LC_ALL, "");
+
+  rentcar_init();
 
   GError *error = NULL;
   GOptionContext *context;

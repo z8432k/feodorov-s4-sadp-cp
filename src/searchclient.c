@@ -3,7 +3,7 @@
 #include <glib.h>
 #include "string.h"
 
-#include "storage.h"
+#include "rentcar.h"
 #include "stringify_json.h"
 #include "wordsearch.h"
 #include "skiplist.h"
@@ -81,20 +81,22 @@ void search_cars(gpointer data, gpointer user_data)
 
 int main(int argc, char *argv[])
 {
-    setlocale(LC_ALL, "");
+  setlocale(LC_ALL, "");
 
-    GError *error = NULL;
-    GOptionContext *context;
+  rentcar_init();
 
-    context = g_option_context_new(" - Поиск клиента в базе");
-    g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
+  GError *error = NULL;
+  GOptionContext *context;
 
-    g_option_context_set_description(context, "Поиск по номеру удостоверения имеет более высокий приоритет при указании обоих параметров одновременно.");
+  context = g_option_context_new(" - Поиск клиента в базе");
+  g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
 
-    if (!g_option_context_parse (context, &argc, &argv, &error)) {
-        g_print ("option parsing failed: %s\n", error->message);
-        exit (1);
-    }
+  g_option_context_set_description(context, "Поиск по номеру удостоверения имеет более высокий приоритет при указании обоих параметров одновременно.");
+
+  if (!g_option_context_parse (context, &argc, &argv, &error)) {
+      g_print ("option parsing failed: %s\n", error->message);
+      exit (1);
+  }
 
   Data_t *data= structured_data();
 

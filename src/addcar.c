@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <glib.h>
-#include "storage.h"
+#include "rentcar.h"
 
 #define GETTEXT_PACKAGE "gtk20"
 

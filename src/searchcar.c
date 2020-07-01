@@ -3,7 +3,7 @@
 #include <glib.h>
 #include "string.h"
 
-#include "storage.h"
+#include "rentcar.h"
 #include "stringify_json.h"
 
 #define GETTEXT_PACKAGE "gtk20"
@@ -35,6 +35,8 @@ const wchar_t *GetWC(const char *c)
 int main(int argc, char *argv[])
 {
     setlocale(LC_ALL, "");
+
+    rentcar_init();
 
     GError *error = NULL;
     GOptionContext *context;
