@@ -1,0 +1,24 @@
+os:
+  - linux
+dist: bionic
+language: c
+compiler: gcc
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-9
+      - cmake
+      - libglib2.0-dev
+      - flex
+      - bison
+
+script:
+  - sudo ln -s /usr/bin/gcc-9 /usr/local/bin/gcc
+  - gcc -v && cmake --version
+  - mkdir -p build && cd build
+  - cmake ..
+  - cmake --build .
+  - ctest
