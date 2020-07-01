@@ -394,6 +394,13 @@ CREATE INDEX rents_client_license_idx ON public.rents USING btree (client_licens
 
 
 --
+-- Name: rents_return_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX rents_return_date ON public.rents USING btree (return_date);
+
+
+--
 -- Name: cars cars_check_service; Type: TRIGGER; Schema: public; Owner: -
 --
 
