@@ -30,6 +30,6 @@ target_include_directories(rentcar_pgsql_store
         ${GLIB2_INCLUDE_DIRS}
         ${PGSQL_INCLUDE_DIRS})
 target_link_libraries(rentcar_pgsql_store
-        INTERFACE
+        PUBLIC
         ${GLIB2_LDFLAGS}
         ${PGSQL_LDFLAGS})

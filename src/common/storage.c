@@ -5,7 +5,7 @@
 #include <glib.h>
 #include <stdlib.h>
 
-#define DRIVER_PATH "./cmake-build-debug/lib/rentcar_pgsql_store.so"
+#define DRIVER_PATH "librentcar_pgsql_store.so"
 
 static gpointer driver_object;
 static const DriverImpl *driver;
@@ -13,7 +13,7 @@ static const DriverImpl *driver;
 gint storage_init() {
   gint result = 0;
 
-  driver_object = dlopen(DRIVER_PATH, RTLD_LOCAL);
+  driver_object = dlopen(DRIVER_PATH, RTLD_NOW);
 
   // TODO: Graceful exit
   if (!driver_object) {
