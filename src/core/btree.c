@@ -203,7 +203,7 @@ static gboolean btree_internal_lookup_node(BTreeNode *node, gpointer user_data)
 
   return FALSE;
 }
-
+/*
 static BTreeNode* _btree_remove_deep(BTreeNode *current_node, gconstpointer key)
 {
   gint comp_result = current_node->tree->comparator(key, current_node->key, NULL);
@@ -233,7 +233,7 @@ static BTreeNode* _btree_remove_deep(BTreeNode *current_node, gconstpointer key)
 
   return btree_balance(current_node);
 }
-
+*/
 BTree* btree_new_full(GCompareDataFunc comparator, GDestroyNotify key_destroy_func, GDestroyNotify value_destroy_func)
 {
   BTree *tree = g_new0(BTree, 1);

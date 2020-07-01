@@ -3,60 +3,40 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 pkg_check_modules(JANSSON REQUIRED jansson)
 
+include_directories(${CMAKE_CURRENT_LIST_DIR}/include
+        ${CMAKE_CURRENT_LIST_DIR}/../core/include
+        ${CMAKE_CURRENT_LIST_DIR}/storage_drivers/include
+        ${GLIB2_INCLUDE_DIRS})
+
 add_library(data
         OBJECT
         data.c)
-target_include_directories(data
-        PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/include
-        ${CMAKE_CURRENT_LIST_DIR}/../core/include
-        ${CMAKE_CURRENT_LIST_DIR}/storage/include
-        ${GLIB2_INCLUDE_DIRS})
+
+add_library(main
+        OBJECT
+        rentcar.c)
 
 add_library(storage
         OBJECT
         storage.c)
-target_include_directories(storage
-        PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/include
-        ${CMAKE_CURRENT_LIST_DIR}/../core/include
-        ${CMAKE_CURRENT_LIST_DIR}/storage/include
-        ${GLIB2_INCLUDE_DIRS})
 
 add_library(client
         OBJECT
         client.c)
-target_include_directories(client
-        PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/include
-        ${GLIB2_INCLUDE_DIRS}
-        ${JANSSON_INCLUDE_DIRS})
 
 add_library(car
         OBJECT
         car.c)
-target_include_directories(car
-        PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/include
-        ${GLIB2_INCLUDE_DIRS})
 
 add_library(rentrow
         OBJECT
         rentrow.c)
-target_include_directories(rentrow
-        PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/include
-        ${GLIB2_INCLUDE_DIRS})
 
 add_library(stringify_json
         OBJECT
         stringify_json.c)
 target_include_directories(stringify_json
         PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/include
-        ${CMAKE_CURRENT_LIST_DIR}/../core/include
-        ${CMAKE_CURRENT_LIST_DIR}/storage/include
-        ${GLIB2_INCLUDE_DIRS}
         ${JANSSON_INCLUDE_DIRS})
 
 add_library(rentcar
@@ -66,6 +46,7 @@ add_library(rentcar
         $<TARGET_OBJECTS:client>
         $<TARGET_OBJECTS:car>
         $<TARGET_OBJECTS:rentrow>
+        $<TARGET_OBJECTS:main>
         $<TARGET_OBJECTS:stringify_json>)
 target_link_libraries(rentcar
         INTERFACE

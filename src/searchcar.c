@@ -3,7 +3,7 @@
 #include <glib.h>
 #include "string.h"
 
-#include "data.h"
+#include "storage.h"
 #include "stringify_json.h"
 
 #define GETTEXT_PACKAGE "gtk20"
@@ -11,18 +11,17 @@
 gchar *request;
 gchar *number;
 
-static GOptionEntry entries[] =
-        {
-                { "request", 'r', 0, G_OPTION_ARG_STRING, &request,
-                        "Поисковый запрос по цвету автомобиля",
-                        "голубой" },
+static GOptionEntry entries[] = {
+    { "request", 'r', 0, G_OPTION_ARG_STRING, &request,
+            "Поисковый запрос по цвету автомобиля",
+            "голубой" },
 
-                { "number", 'n', 0, G_OPTION_ARG_STRING, &number,
-                        "Поисковый запрос по гос. номеру",
-                        "ANNNAA-NN" },
+    { "number", 'n', 0, G_OPTION_ARG_STRING, &number,
+            "Поисковый запрос по гос. номеру",
+            "ANNNAA-NN" },
 
-                { NULL }
-        };
+    { NULL }
+  };
 
 const wchar_t *GetWC(const char *c)
 {
@@ -82,7 +81,7 @@ int main(int argc, char *argv[])
       g_print("%s", result);
     }
     else if (request) {
-      RawData_t* result = data_search_car_fragment(request);
+      // RawData_t* result = data_search_car_fragment(request);
       g_print("OK");
     }
     else {

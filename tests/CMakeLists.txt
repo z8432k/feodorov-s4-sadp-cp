@@ -1,5 +1,7 @@
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE  ON)
 
+add_compile_options("-Wno-unused-function" "-Wno-unused-variable" "-Wno-unused-function")
+
 list(APPEND _tests
   test_hashtab
   test_merge_sort
@@ -7,10 +9,6 @@ list(APPEND _tests
 
 foreach(_test IN LISTS _tests)
   add_executable(${_test} ${_test}.c)
-
-  target_compile_options(${_test}
-          PRIVATE
-          "-Wno-unused-function -Wno-unused-variable")
 
   target_include_directories(${_test}
     PRIVATE)
@@ -28,16 +26,10 @@ target_link_libraries(test_layerlist
         core)
 
 add_executable(test_skiplist skiplist/skiplist_main_test.c)
-target_compile_options(test_skiplist
-        PRIVATE
-        "-Wno-unused-function" "-Wno-unused-variable")
 target_link_libraries(test_skiplist
         core)
 
 add_executable(test_wordsearch wordsearch/wordsearch_main_test.c)
-target_compile_options(test_wordsearch
-        PRIVATE
-        "-Wno-unused-function" "-Wno-unused-variable")
 target_link_libraries(test_wordsearch
         core)
 

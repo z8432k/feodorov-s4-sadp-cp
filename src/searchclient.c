@@ -4,7 +4,7 @@
 #include <glib.h>
 #include "string.h"
 
-#include "data.h"
+#include "storage.h"
 #include "stringify_json.h"
 #include "wordsearch.h"
 #include "skiplist.h"
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
   Data_t *data= structured_data();
 
-    RawData_t *raw = new_data();
+    RawData_t *raw = data_new();
 
   GString *lic = g_string_new(license);
 

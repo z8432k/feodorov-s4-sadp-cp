@@ -1,11 +1,11 @@
 #include <glib.h>
 #include "btree.h"
 
-static gint src[] = {1, 5, 16, 2, 99, 68, 36, 86, 79, 52, 14, 9, 7, 0};
+static glong src[] = {1, 5, 16, 2, 99, 68, 36, 86, 79, 52, 14, 9, 7, 0};
 
 static gint comparator(gconstpointer a, gconstpointer b, gpointer user_data)
 {
-  return a - b;
+  return (glong) a - (glong) b;
 }
 
 static void new_tree(BTree **tree, gconstpointer pVoid) {
@@ -27,7 +27,7 @@ static void new_test(BTree **tree, gconstpointer ignored)
 
 static void insert_test(BTree **tree, gconstpointer ignored)
 {
-  btree_insert(*tree, 15, 2);
+  btree_insert(*tree, (gpointer) 15, (gpointer) 2);
 }
 
 static void replace_test(BTree **tree, gconstpointer ignored)

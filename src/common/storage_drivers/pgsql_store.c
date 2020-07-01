@@ -1,9 +1,23 @@
 #include <stdlib.h>
 #include <glib.h>
-#include "pgsql_store.h"
 #include <errno.h>
+#include "pgsql_store.h"
 #include "data.h"
 #include "data_types.h"
+
+static const DriverImpl impl = {
+  load_data_impl,
+  add_car_impl,
+  drop_car_impl,
+  drop_cars_impl,
+  service_car_impl,
+  add_client_impl,
+  drop_client_impl,
+  drop_clients_impl,
+  rent_car_impl,
+  return_car_impl,
+  search_car_fragment_impl
+};
 
 // CARS
 static gchar *select_cars_sql = "SELECT * FROM cars;";
@@ -28,6 +42,11 @@ static gchar *update_rent_sql = "UPDATE rents SET return_date = now() WHERE clie
 static PGconn *connection;
 
 static PGresult *res;
+
+const DriverImpl* driver_init()
+{
+  return &impl;
+}
 
 void do_exit(PGconn *conn) {
   PQfinish(conn);

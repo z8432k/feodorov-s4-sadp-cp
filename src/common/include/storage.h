@@ -4,6 +4,8 @@
 #include <glib.h>
 #include "data.h"
 
+gint storage_init();
+
 RawData_t* data_load();
 gssize data_add_car(const Car_t *car);
 gssize data_drop_car(const gchar *number);
