@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include <locale.h>
 #include <glib.h>
 #include "string.h"

@@ -12,8 +12,9 @@ addons:
       - gcc-9
       - cmake
       - libglib2.0-dev
-      - flex
-      - bison
+      - libjansson-dev
+      - libpq-dev
+
 
 script:
   - sudo ln -s /usr/bin/gcc-9 /usr/local/bin/gcc
